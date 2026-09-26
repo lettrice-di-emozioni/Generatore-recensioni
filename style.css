@@ -1,0 +1,129 @@
+:root {
+  --bg-color: #f5e9d8;
+  --card-bg: #ffffff;
+  --text-color: #2b2b2b;
+  --accent-color: #b86b35;
+  --accent-hover: #9e592a;
+  --secondary-color: #d1bfa7;
+  --border-radius: 12px;
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.app-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.6rem;
+  color: #4a3525;
+}
+
+.subtitle {
+  margin-top: 4px;
+  font-size: 0.9rem;
+  color: #7a6352;
+}
+
+.card-section, .actions-section, .result-section {
+  background: var(--card-bg);
+  padding: 16px;
+  border-radius: var(--border-radius);
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #4a3525;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+label {
+  display: block;
+  margin-bottom: 12px;
+}
+
+label span {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #555;
+}
+
+input[type="text"], select, textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 0.95rem;
+  background-color: #fafafa;
+}
+
+textarea {
+  resize: vertical;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 8px;
+  transition: background-color 0.2s;
+}
+
+.primary-btn {
+  background-color: var(--accent-color);
+  color: white;
+}
+
+.secondary-btn {
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+}
+
+.outline-btn {
+  background-color: transparent;
+  border: 1px solid #bbb;
+  color: #666;
+}
+
+.action-btn {
+  background-color: #e2d4c3;
+  color: #333;
+  margin-top: 8px;
+}
+
+.output-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.status-msg {
+  margin-top: 8px;
+  font-size: 0.85rem;
+  text-align: center;
+  color: #2e7d32;
+  font-weight: bold;
+}
