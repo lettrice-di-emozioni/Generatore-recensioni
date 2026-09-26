@@ -4,10 +4,55 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnClear = document.getElementById("btnClear");
   const btnCopy = document.getElementById("btnCopy");
   const btnDownload = document.getElementById("btnDownload");
+  const btnAutoTag = document.getElementById("btnAutoTag");
   const outputArea = document.getElementById("outputArea");
   const statusMsg = document.getElementById("status");
 
+  // Gestione selezione bottoni Tag
+  const tagChips = document.querySelectorAll('.tag-chip');
+  tagChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chip.classList.toggle('selected');
+    });
+  });
+
+  // Generatore/Suggeritore Automatico Tag
+  btnAutoTag.addEventListener('click', () => {
+    const genreText = (document.getElementById("bookGenre").value + " " + document.getElementById("bookTitle").value).toLowerCase();
+    
+    // Attiva sempre i tag base del blog
+    selectTagByData('lecodellepagine');
+    selectTagByData('bookstagramitalia');
+    selectTagByData('consiglidilettura');
+    selectTagByData('recensionilibri');
+
+    // Riconoscimento intelligente del genere
+    if (genreText.includes('classici') || genreText.includes('classico')) selectTagByData('classici');
+    if (genreText.includes('thriller') || genreText.includes('giallo') || genreText.includes('noir')) {
+      selectTagByData('thriller');
+      selectTagByData('psicologico');
+    }
+    if (genreText.includes('storico') || genreText.includes('storia')) selectTagByData('storico');
+    if (genreText.includes('saggio') || genreText.includes('saggistica')) selectTagByData('saggistica');
+    if (genreText.includes('narrativa') || genreText.includes('romanzo')) selectTagByData('narrativa');
+
+    showStatus("Tag suggeriti applicati! 🪄");
+  });
+
+  function selectTagByData(tagName) {
+    const chip = document.querySelector(`.tag-chip[data-tag="${tagName}"]`);
+    if (chip) chip.classList.add('selected');
+  }
+
   function getFormData() {
+    const selectedTags = Array.from(document.querySelectorAll('.tag-chip.selected'))
+                              .map(chip => chip.getAttribute('data-tag'));
+    
+    const customTagsRaw = document.getElementById("customTags").value.trim();
+    const customTags = customTagsRaw ? customTagsRaw.split(/\s+/).map(t => t.replace('#', '')) : [];
+
+    const allTags = [...new Set([...selectedTags, ...customTags])];
+
     return {
       title: document.getElementById("bookTitle").value.trim() || "Senza Titolo",
       author: document.getElementById("bookAuthor").value.trim() || "Autore Sconosciuto",
@@ -20,24 +65,26 @@ document.addEventListener("DOMContentLoaded", () => {
       weaknesses: document.getElementById("weaknesses").value.trim() || "",
       themes: document.getElementById("themes").value.trim() || "",
       quote: document.getElementById("keyQuote").value.trim() || "",
-      target: document.getElementById("targetAudience").value.trim() || ""
+      target: document.getElementById("targetAudience").value.trim() || "",
+      tags: allTags
     };
   }
 
-  // Formattazione per Obsidian e apertura automatica
+  // Formattazione per Obsidian
   btnObsidian.addEventListener("click", () => {
     const data = getFormData();
     
+    const yamlTags = data.tags.length > 0 
+      ? "\ntags:\n" + data.tags.map(tag => `  - ${tag}`).join("\n")
+      : "\ntags:\n  - recensioni\n  - libri";
+
     const mdContent = `---
 title: "${data.title}"
 author: "${data.author}"
 genre: "${data.genre}"
 format: "${data.format}"
 rating: "${data.rating}"
-date: ${new Date().toISOString().split('T')[0]}
-tags:
-  - recensioni
-  - libri
+date: ${new Date().toISOString().split('T')[0]}${yamlTags}
 ---
 
 # ${data.title} - ${data.author}
@@ -69,7 +116,6 @@ ${data.target}
 
     outputArea.value = mdContent;
 
-    // URL Scheme senza vault specifico (usa quello correntemente aperto)
     const encodedTitle = encodeURIComponent(data.title);
     const encodedContent = encodeURIComponent(mdContent);
     const obsidianUri = `obsidian://new?name=${encodedTitle}&content=${encodedContent}`;
@@ -78,14 +124,18 @@ ${data.target}
       window.location.href = obsidianUri;
       showStatus("Invio a Obsidian in corso... 🚀");
     } catch (e) {
-      showStatus("Nota formattata! Se Obsidian non si apre, usa Copia.");
+      showStatus("Nota formattata! Usa Copia se Obsidian non si apre.");
     }
   });
 
-  // Formattazione per Blog (HTML / Testo Pulito)
+  // Formattazione per Blog / Social
   btnBlog.addEventListener("click", () => {
     const data = getFormData();
     
+    const stringTags = data.tags.length > 0 
+      ? `<br><p><em>${data.tags.map(t => '#' + t).join(" ")}</em></p>`
+      : "";
+
     const htmlContent = `<h2>Recensione: ${data.title} di ${data.author}</h2>
 <p><strong>Genere:</strong> ${data.genre} | <strong>Valutazione:</strong> ${data.rating}</p>
 
@@ -98,13 +148,12 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
 
 <blockquote>"${data.quote}"</blockquote>
 
-<p><strong>Consigliato a:</strong> ${data.target}</p>`;
+<p><strong>Consigliato a:</strong> ${data.target}</p>${stringTags}`;
 
     outputArea.value = htmlContent;
-    showStatus("Scheda formattata per il Blog!");
+    showStatus("Scheda formattata per il Blog con Hashtag!");
   });
 
-  // Copia negli appunti
   btnCopy.addEventListener("click", () => {
     if (!outputArea.value) return;
     navigator.clipboard.writeText(outputArea.value).then(() => {
@@ -112,7 +161,6 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     });
   });
 
-  // Scarica file .md
   btnDownload.addEventListener("click", () => {
     if (!outputArea.value) return;
     const data = getFormData();
@@ -124,11 +172,11 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     showStatus("File .md scaricato! 💾");
   });
 
-  // Svuota campi
   btnClear.addEventListener("click", () => {
     document.querySelectorAll("input, textarea").forEach(input => input.value = "");
+    document.querySelectorAll(".tag-chip").forEach(chip => chip.classList.remove("selected"));
     outputArea.value = "";
-    showStatus("Campi svuotati.");
+    showStatus("Campi e tag svuotati.");
   });
 
   function showStatus(msg) {
@@ -136,3 +184,4 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     setTimeout(() => { statusMsg.textContent = ""; }, 3000);
   }
 });
+      
