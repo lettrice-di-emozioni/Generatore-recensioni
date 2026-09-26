@@ -41,6 +41,27 @@ body {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
+.section-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.section-header-flex h2 {
+  margin: 0;
+}
+
+.magic-btn {
+  width: auto;
+  padding: 6px 12px;
+  font-size: 0.8rem;
+  background-color: #6b4e71;
+  color: white;
+  border-radius: 20px;
+  margin: 0;
+}
+
 h2 {
   font-size: 1.1rem;
   margin-top: 0;
@@ -126,4 +147,36 @@ button {
   text-align: center;
   color: #2e7d32;
   font-weight: bold;
+}
+
+/* Stili per i Tag Chip */
+.tag-group {
+  margin-bottom: 12px;
+}
+
+.tag-group span {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #7a6352;
+  margin-bottom: 6px;
+}
+
+.tag-chip {
+  display: inline-block;
+  width: auto;
+  background-color: #f0e6d2;
+  color: #4a3525;
+  border: 1px solid #d1bfa7;
+  border-radius: 20px;
+  padding: 6px 12px;
+  margin: 0 6px 6px 0;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.tag-chip.selected {
+  background-color: var(--accent-color);
+  color: white;
+  border-color: var(--accent-color);
 }
