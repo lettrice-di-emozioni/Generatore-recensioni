@@ -32,7 +32,7 @@
       <div class="grid-2">
         <label>
           <span>Genere</span>
-          <input type="text" id="bookGenre" placeholder="Es. Classico, Narrativa" />
+          <input type="text" id="bookGenre" placeholder="Es. Classico, Thriller, Storico" />
         </label>
         <label>
           <span>Formato</span>
@@ -81,6 +81,40 @@
       <label>
         <span>A chi lo consiglio (Target)</span>
         <input type="text" id="targetAudience" placeholder="Es. Amanti dei classici introspettivi" />
+      </label>
+    </section>
+
+    <!-- Sezione Tag e Hashtag -->
+    <section class="card-section">
+      <div class="section-header-flex">
+        <h2>🏷️ Tag & Hashtag Rapidi</h2>
+        <button type="button" id="btnAutoTag" class="magic-btn">🪄 Suggerisci Tag</button>
+      </div>
+      <p class="subtitle" style="margin-bottom:12px;">Tocca per selezionare i tag o usa il tasto magico.</p>
+      
+      <div class="tag-group">
+        <span>Generi / Categorie:</span>
+        <button type="button" class="tag-chip" data-tag="narrativa">#narrativa</button>
+        <button type="button" class="tag-chip" data-tag="classici">#classici</button>
+        <button type="button" class="tag-chip" data-tag="thriller">#thriller</button>
+        <button type="button" class="tag-chip" data-tag="saggistica">#saggistica</button>
+        <button type="button" class="tag-chip" data-tag="storico">#storico</button>
+        <button type="button" class="tag-chip" data-tag="psicologico">#psicologico</button>
+      </div>
+
+      <div class="tag-group">
+        <span>Instagram / Social:</span>
+        <button type="button" class="tag-chip" data-tag="lecodellepagine">#lecodellepagine</button>
+        <button type="button" class="tag-chip" data-tag="bookstagramitalia">#bookstagramitalia</button>
+        <button type="button" class="tag-chip" data-tag="consiglidilettura">#consiglidilettura</button>
+        <button type="button" class="tag-chip" data-tag="recensionilibri">#recensionilibri</button>
+        <button type="button" class="tag-chip" data-tag="leggerechepassione">#leggerechepassione</button>
+        <button type="button" class="tag-chip" data-tag="storiadilettura">#storiadilettura</button>
+      </div>
+
+      <label style="margin-top: 12px;">
+        <span>Altri Tag personalizzati (separati da spazio)</span>
+        <input type="text" id="customTags" placeholder="Es. #nativi #storia #capolavoro" />
       </label>
     </section>
 
