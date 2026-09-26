@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Generatore Schede Libro</title>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="theme-color" content="#f5e9d8" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="title-block">
+      <h1>Schede & Recensioni</h1>
+      <p class="subtitle">Bozze rapide e analisi a caldo per il blog</p>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- Dati Libro -->
+    <section class="card-section">
+      <h2>📚 Dati del Libro</h2>
+      <div class="grid-2">
+        <label>
+          <span>Titolo</span>
+          <input type="text" id="bookTitle" placeholder="Es. Stoner" />
+        </label>
+        <label>
+          <span>Autore</span>
+          <input type="text" id="bookAuthor" placeholder="Es. John Williams" />
+        </label>
+      </div>
+      <div class="grid-2">
+        <label>
+          <span>Genere</span>
+          <input type="text" id="bookGenre" placeholder="Es. Classico, Narrativa" />
+        </label>
+        <label>
+          <span>Formato</span>
+          <select id="bookFormat">
+            <option value="Cartaceo">📖 Cartaceo</option>
+            <option value="Ebook / Kobo">📱 Ebook / Kobo</option>
+            <option value="Audiolibro">🎧 Audiolibro</option>
+          </select>
+        </label>
+      </div>
+      <div class="grid-2">
+        <label>
+          <span>Valutazione (Stelle / Voto)</span>
+          <input type="text" id="bookRating" placeholder="Es. 5/5 ⭐⭐⭐⭐⭐" />
+        </label>
+        <label>
+          <span>Impressione / Emotività</span>
+          <input type="text" id="bookMood" placeholder="Es. Commovente, Profondo 😭" />
+        </label>
+      </div>
+    </section>
+
+    <!-- Impressioni & Analisi -->
+    <section class="card-section">
+      <h2>✍️ Impressioni & Analisi a Caldo</h2>
+      <label>
+        <span>L'essenza in una frase (Pitch)</span>
+        <input type="text" id="pitch" placeholder="Di cosa parla veramente questo libro?" />
+      </label>
+      <label>
+        <span>Punti di Forza</span>
+        <textarea id="strengths" rows="3" placeholder="Cosa ti ha colpito di più? (stile, personaggi, colpi di scena...)"></textarea>
+      </label>
+      <label>
+        <span>Punti Deboli / Note critiche</span>
+        <textarea id="weaknesses" rows="2" placeholder="Cosa non ti ha convinto o cosa tenere a mente..."></textarea>
+      </label>
+      <label>
+        <span>Personaggi e Temi principali</span>
+        <input type="text" id="themes" placeholder="Es. Solitudine, riscatto, identità" />
+      </label>
+      <label>
+        <span>Citazione Simbolo</span>
+        <textarea id="keyQuote" rows="2" placeholder="Incolla qui la citazione più bella..."></textarea>
+      </label>
+      <label>
+        <span>A chi lo consiglio (Target)</span>
+        <input type="text" id="targetAudience" placeholder="Es. Amanti dei classici introspettivi" />
+      </label>
+    </section>
+
+    <!-- Azioni & Generazione -->
+    <section class="actions-section">
+      <button id="btnObsidian" class="primary-btn">📝 Formatta e Invia a Obsidian</button>
+      <button id="btnBlog" class="secondary-btn">🌐 Formatta per Blog / HTML</button>
+      <button id="btnClear" class="outline-btn">🗑️ Svuota Campi</button>
+    </section>
+
+    <!-- Anteprima Risultato -->
+    <section class="result-section">
+      <h2>📄 Scheda Generata</h2>
+      <textarea id="outputArea" rows="12" readonly placeholder="Il testo formattato apparirà qui..."></textarea>
+      <div class="output-actions">
+        <button id="btnCopy" class="action-btn">📋 Copia negli Appunti</button>
+        <button id="btnDownload" class="action-btn">💾 Scarica (.md)</button>
+      </div>
+      <div id="status" class="status-msg"></div>
+    </section>
+  </main>
+
+  <script src="App.js"></script>
+</body>
+</html>
