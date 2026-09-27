@@ -1,4 +1,4 @@
-Document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener("DOMContentLoaded", () => {
   const btnObsidian = document.getElementById("btnObsidian");
   const btnBlog = document.getElementById("btnBlog");
   const btnClear = document.getElementById("btnClear");
