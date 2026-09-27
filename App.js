@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", () => {
+Document.addEventListener("DOMContentLoaded", () => {
   const btnObsidian = document.getElementById("btnObsidian");
   const btnBlog = document.getElementById("btnBlog");
   const btnClear = document.getElementById("btnClear");
@@ -7,6 +7,36 @@ document.addEventListener("DOMContentLoaded", () => {
   const btnAutoTag = document.getElementById("btnAutoTag");
   const outputArea = document.getElementById("outputArea");
   const statusMsg = document.getElementById("status");
+
+  // --- INTEGRATORE RICONOSCIMENTO VOCALE ---
+  const btnVoiceGlobal = document.getElementById("btnVoiceGlobal"); // Pulsante voce globale smart (se presente nel file HTML)
+
+  // Ascolto sui singoli microfoni legati agli input (es. pulsante con data-voice-for="bookTitle")
+  const voiceButtons = document.querySelectorAll("[data-voice-for]");
+  voiceButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const targetId = btn.getAttribute("data-voice-for");
+      const targetInput = document.getElementById(targetId);
+      if (targetInput) {
+        avviaRiconoscimentoVocale((testo) => {
+          // Aggiunge il testo al campo mantenendo ciò che c'era o sovrascrivendo
+          targetInput.value = targetInput.value ? targetInput.value + " " + testo : testo;
+          showStatus(`Dettato nel campo: ${testo}`);
+        });
+      }
+    });
+  });
+
+  // Ascolto per Comando Smart Globale
+  if (btnVoiceGlobal) {
+    btnVoiceGlobal.addEventListener("click", () => {
+      showStatus("Ascolto attivo... Pronuncia Titolo, Autore, Citazione, ecc. 🎙️");
+      avviaRiconoscimentoVocale((testo) => {
+        analizzaECompilaVocale(testo);
+        showStatus("Campi compilati a voce! 🪄");
+      });
+    });
+  }
 
   // Gestione selezione bottoni Tag
   const tagChips = document.querySelectorAll('.tag-chip');
@@ -183,5 +213,57 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     statusMsg.textContent = msg;
     setTimeout(() => { statusMsg.textContent = ""; }, 3000);
   }
+
+  // --- FUNZIONI DI SUPPORTO VOCALE ---
+  function avviaRiconoscimentoVocale(callback) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Il riconoscimento vocale non è supportato su questo browser.");
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'it-IT';
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = (event) => {
+      const trascrizione = event.results[0][0].transcript;
+      callback(trascrizione);
+    };
+    recognition.onerror = (event) => {
+      showStatus("Errore nel riconoscimento vocale ❌");
+    };
+    recognition.start();
+  }
+
+  function analizzaECompilaVocale(testo) {
+    const testoLower = testo.toLowerCase();
+
+    // Titolo
+    if (testoLower.includes('titolo')) {
+      const v = testo.split(/titolo/i)[1]?.split(/autore|genere|citazione|punti|valutazione/i)[0]?.trim();
+      if (v) document.getElementById('bookTitle').value = v;
+    }
+    // Autore
+    if (testoLower.includes('autore')) {
+      const v = testo.split(/autore/i)[1]?.split(/titolo|genere|citazione|punti|valutazione/i)[0]?.trim();
+      if (v) document.getElementById('bookAuthor').value = v;
+    }
+    // Genere
+    if (testoLower.includes('genere')) {
+      const v = testo.split(/genere/i)[1]?.split(/titolo|autore|citazione|punti|valutazione/i)[0]?.trim();
+      if (v) document.getElementById('bookGenre').value = v;
+    }
+    // Citazione
+    if (testoLower.includes('citazione')) {
+      const v = testo.split(/citazione/i)[1]?.split(/titolo|autore|genere|punti|valutazione/i)[0]?.trim();
+      if (v) document.getElementById('keyQuote').value = v;
+    }
+    // Punti di forza
+    if (testoLower.includes('punti di forza') || testoLower.includes('pregi')) {
+      const v = testo.split(/punti di forza|pregi/i)[1]?.split(/titolo|autore|genere|citazione/i)[0]?.trim();
+      if (v) document.getElementById('strengths').value = v;
+    }
+  }
 });
-      
+                                    
