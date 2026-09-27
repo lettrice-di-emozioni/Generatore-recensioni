@@ -16,22 +16,32 @@
   </header>
 
   <main class="app-main">
+    <!-- Comando Vocale Smart Globale -->
+    <section class="card-section" style="text-align: center; background-color: #fdf8f0;">
+      <button type="button" id="btnVoiceGlobal" class="magic-btn" style="width: 100%; font-size: 1.1rem; padding: 12px;">
+        🎙️ Dettatura Smart Globale (Ditta a ruota libera)
+      </button>
+      <p class="subtitle" style="margin-top: 6px; font-size: 0.85rem;">
+        Pronuncia parole chiave come: <em>"Titolo...", "Autore...", "Genere...", "Citazione..."</em>
+      </p>
+    </section>
+
     <!-- Dati Libro -->
     <section class="card-section">
       <h2>📚 Dati del Libro</h2>
       <div class="grid-2">
         <label>
-          <span>Titolo</span>
+          <span>Titolo <button type="button" data-voice-for="bookTitle" title="Detta Titolo">🎙️</button></span>
           <input type="text" id="bookTitle" placeholder="Es. Stoner" />
         </label>
         <label>
-          <span>Autore</span>
+          <span>Autore <button type="button" data-voice-for="bookAuthor" title="Detta Autore">🎙️</button></span>
           <input type="text" id="bookAuthor" placeholder="Es. John Williams" />
         </label>
       </div>
       <div class="grid-2">
         <label>
-          <span>Genere</span>
+          <span>Genere <button type="button" data-voice-for="bookGenre" title="Detta Genere">🎙️</button></span>
           <input type="text" id="bookGenre" placeholder="Es. Classico, Thriller, Storico" />
         </label>
         <label>
@@ -45,11 +55,11 @@
       </div>
       <div class="grid-2">
         <label>
-          <span>Valutazione (Stelle / Voto)</span>
+          <span>Valutazione (Stelle / Voto) <button type="button" data-voice-for="bookRating" title="Detta Voto">🎙️</button></span>
           <input type="text" id="bookRating" placeholder="Es. 5/5 ⭐⭐⭐⭐⭐" />
         </label>
         <label>
-          <span>Impressione / Emotività</span>
+          <span>Impressione / Emotività <button type="button" data-voice-for="bookMood" title="Detta Emotività">🎙️</button></span>
           <input type="text" id="bookMood" placeholder="Es. Commovente, Profondo 😭" />
         </label>
       </div>
@@ -59,27 +69,27 @@
     <section class="card-section">
       <h2>✍️ Impressioni & Analisi a Caldo</h2>
       <label>
-        <span>L'essenza in una frase (Pitch)</span>
+        <span>L'essenza in una frase (Pitch) <button type="button" data-voice-for="pitch" title="Detta Pitch">🎙️</button></span>
         <input type="text" id="pitch" placeholder="Di cosa parla veramente questo libro?" />
       </label>
       <label>
-        <span>Punti di Forza</span>
+        <span>Punti di Forza <button type="button" data-voice-for="strengths" title="Detta Punti di Forza">🎙️</button></span>
         <textarea id="strengths" rows="3" placeholder="Cosa ti ha colpito di più? (stile, personaggi, colpi di scena...)"></textarea>
       </label>
       <label>
-        <span>Punti Deboli / Note critiche</span>
+        <span>Punti Deboli / Note critiche <button type="button" data-voice-for="weaknesses" title="Detta Punti Deboli">🎙️</button></span>
         <textarea id="weaknesses" rows="2" placeholder="Cosa non ti ha convinto o cosa tenere a mente..."></textarea>
       </label>
       <label>
-        <span>Personaggi e Temi principali</span>
+        <span>Personaggi e Temi principali <button type="button" data-voice-for="themes" title="Detta Temi">🎙️</button></span>
         <input type="text" id="themes" placeholder="Es. Solitudine, riscatto, identità" />
       </label>
       <label>
-        <span>Citazione Simbolo</span>
+        <span>Citazione Simbolo <button type="button" data-voice-for="keyQuote" title="Detta Citazione">🎙️</button></span>
         <textarea id="keyQuote" rows="2" placeholder="Incolla qui la citazione più bella..."></textarea>
       </label>
       <label>
-        <span>A chi lo consiglio (Target)</span>
+        <span>A chi lo consiglio (Target) <button type="button" data-voice-for="targetAudience" title="Detta Target">🎙️</button></span>
         <input type="text" id="targetAudience" placeholder="Es. Amanti dei classici introspettivi" />
       </label>
     </section>
@@ -113,7 +123,7 @@
       </div>
 
       <label style="margin-top: 12px;">
-        <span>Altri Tag personalizzati (separati da spazio)</span>
+        <span>Altri Tag personalizzati (separati da spazio) <button type="button" data-voice-for="customTags" title="Detta Tag">🎙️</button></span>
         <input type="text" id="customTags" placeholder="Es. #nativi #storia #capolavoro" />
       </label>
     </section>
