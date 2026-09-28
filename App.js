@@ -153,6 +153,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Formattazione per Obsidian
   btnObsidian.addEventListener("click", () => {
+      // Leggi lo stato selezionato per decidere la cartella
+  const selectStato = document.getElementById('stato-libro');
+  const stato = selectStato ? selectStato.value : 'in-lettura';
+  let cartellaDestinazione = (stato === 'letto') ? 'Letti/' : 'In Lettura/';
+    
     const data = getFormData();
     
     const yamlTags = data.tags.length > 0 
@@ -197,7 +202,7 @@ ${data.target}
 
     outputArea.value = mdContent;
 
-    const encodedTitle = encodeURIComponent(data.title);
+    const encodedTitle = encodeURIComponent(cartellaDestinazione + data.title);
     const encodedContent = encodeURIComponent(mdContent);
     const obsidianUri = `obsidian://new?name=${encodedTitle}&content=${encodedContent}`;
 
