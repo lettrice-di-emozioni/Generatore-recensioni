@@ -25,8 +25,8 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- RICONOSCIMENTO VOCALE ---
-  function avviaRiconoscimentoVocale(callback) {
+  // --- RICONOSCIMENTO VOCALE CON SBLOCCO PERMESSO VERCEL ---
+  async function avviaRiconoscimentoVocale(callback) {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     
     if (!SpeechRecognition) {
@@ -34,6 +34,17 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
+    // 1. Forza la richiesta del permesso audio nativo per sbloccare il dominio Vercel
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop()); // Chiude subito lo stream di test
+    } catch (err) {
+      console.error("Permesso microfono negato:", err);
+      showStatus("❌ Permesso microfono negato dal browser.");
+      return;
+    }
+
+    // 2. Avvia il riconoscimento vocale vero e proprio
     const recognition = new SpeechRecognition();
     recognition.lang = 'it-IT';
     recognition.continuous = false;
@@ -49,7 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     recognition.onerror = (event) => {
       console.error("Errore vocale:", event.error);
-      showStatus("❌ Errore microfono (" + event.error + "). Riprova.");
+      showStatus("❌ Errore microfono (" + event.error + ").");
     };
 
     try {
@@ -65,14 +76,14 @@ document.addEventListener("DOMContentLoaded", () => {
   voiceButtons.forEach(btn => {
     btn.setAttribute("type", "button");
     
-    btn.addEventListener("click", (e) => {
+    btn.addEventListener("click", async (e) => {
       e.preventDefault();
       e.stopPropagation();
 
       const targetId = btn.getAttribute("data-voice-for");
       const targetInput = document.getElementById(targetId);
       if (targetInput) {
-        avviaRiconoscimentoVocale((testo) => {
+        await avviaRiconoscimentoVocale((testo) => {
           targetInput.value = targetInput.value ? targetInput.value + " " + testo : testo;
         });
       }
@@ -82,11 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // Ascolto per Comando Smart Globale
   if (btnVoiceGlobal) {
     btnVoiceGlobal.setAttribute("type", "button");
-    btnVoiceGlobal.addEventListener("click", (e) => {
+    btnVoiceGlobal.addEventListener("click", async (e) => {
       e.preventDefault();
       e.stopPropagation();
 
-      avviaRiconoscimentoVocale((testo) => {
+      await avviaRiconoscimentoVocale((testo) => {
         analizzaECompilaVocale(testo);
         showStatus("Campi compilati a voce! 🪄");
       });
@@ -272,28 +283,28 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
   }
 
   function analizzaECompilaVocale(testo) {
-    const testoLower = testo.toLowerCase();
+    TheTestoLower = testo.toLowerCase();
 
-    if (testoLower.includes('titolo')) {
+    if (TheTestoLower.includes('titolo')) {
       const v = testo.split(/titolo/i)[1]?.split(/autore|genere|citazione|punti|valutazione/i)[0]?.trim();
       if (v) document.getElementById('bookTitle').value = v;
     }
-    if (testoLower.includes('autore')) {
+    if (TheTestoLower.includes('autore')) {
       const v = testo.split(/autore/i)[1]?.split(/titolo|genere|citazione|punti|valutazione/i)[0]?.trim();
       if (v) document.getElementById('bookAuthor').value = v;
     }
-    if (testoLower.includes('genere')) {
+    if (TheTestoLower.includes('genere')) {
       const v = testo.split(/genere/i)[1]?.split(/titolo|autore|citazione|punti|valutazione/i)[0]?.trim();
       if (v) document.getElementById('bookGenre').value = v;
     }
-    if (testoLower.includes('citazione')) {
+    if (TheTestoLower.includes('citazione')) {
       const v = testo.split(/citazione/i)[1]?.split(/titolo|autore|genere|punti|valutazione/i)[0]?.trim();
       if (v) document.getElementById('keyQuote').value = v;
     }
-    if (testoLower.includes('punti di forza') || testoLower.includes('pregi')) {
+    if (TheTestoLower.includes('punti di forza') || TheTestoLower.includes('pregi')) {
       const v = testo.split(/punti di forza|pregi/i)[1]?.split(/titolo|autore|genere|citazione/i)[0]?.trim();
       if (v) document.getElementById('strengths').value = v;
     }
   }
 });
-          
+      
