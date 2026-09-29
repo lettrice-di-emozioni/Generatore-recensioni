@@ -25,57 +25,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- RICONOSCIMENTO VOCALE (Aggiornato con richiesta permessi audio per PWA) ---
-  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-  let recognition = null;
-
-  if (SpeechRecognition) {
-    recognition = new SpeechRecognition();
-    recognition.lang = 'it-IT';
-    recognition.continuous = false;
-    recognition.interimResults = false;
-  }
-
-  async function avviaRiconoscimentoVocale(callback) {
-    if (!recognition) {
+  // --- RICONOSCIMENTO VOCALE ---
+  function avviaRiconoscimentoVocale(callback) {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
       alert("Il riconoscimento vocale non è supportato su questo browser.");
       return;
     }
 
-    // Chiede l'autorizzazione audio ad Android per sbloccare i permessi della PWA
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      stream.getTracks().forEach(track => track.stop());
-    } catch (err) {
-      console.error("Permesso microfono negato:", err);
-      showStatus("❌ Permesso microfono negato. Controlla le impostazioni.");
-      return;
-    }
-
-    try { recognition.stop(); } catch(e) {}
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'it-IT';
+    recognition.continuous = false;
+    recognition.interimResults = false;
 
     showStatus("🎙️ Ascolto in corso... parla pure!");
 
     recognition.onresult = (event) => {
       const trascrizione = event.results[0][0].transcript;
       callback(trascrizione);
+      showStatus("Dettato inserito! 📝");
     };
 
     recognition.onerror = (event) => {
       console.error("Errore vocale:", event.error);
-      if (event.error === 'not-allowed') {
-        showStatus("❌ Permesso microfono negato.");
-      } else {
-        showStatus("❌ Nessun testo rilevato. Riprova.");
-      }
+      showStatus("❌ Errore microfono (" + event.error + "). Riprova.");
     };
-
-    recognition.onend = () => {};
 
     try {
       recognition.start();
     } catch (err) {
       console.error("Impossibile avviare la dettatura:", err);
+      showStatus("❌ Impossibile avviare il microfono.");
     }
   }
 
@@ -93,7 +74,6 @@ document.addEventListener("DOMContentLoaded", () => {
       if (targetInput) {
         avviaRiconoscimentoVocale((testo) => {
           targetInput.value = targetInput.value ? targetInput.value + " " + testo : testo;
-          showStatus(`Dettato inserito! 📝`);
         });
       }
     });
@@ -211,7 +191,7 @@ ${data.strengths || "Nessun punto inserito."}
 ### ⚠️ Punti Deboli / Note
 ${data.weaknesses || "Nessun punto debole evidenziato."}
 
-### 🗝️️ Temi e Personaggi Chiave
+### 🗝 Temi e Personaggi Chiave
 ${data.themes}
 
 ### 💬 Citazione Simbolo
@@ -279,7 +259,7 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     showStatus("File .md scaricato! 💾");
   });
 
-      btnClear.addEventListener("click", () => {
+  btnClear.addEventListener("click", () => {
     document.querySelectorAll("input, textarea").forEach(input => input.value = "");
     document.querySelectorAll(".tag-chip").forEach(chip => chip.classList.remove("selected"));
     outputArea.value = "";
@@ -316,4 +296,4 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     }
   }
 });
-      
+          
