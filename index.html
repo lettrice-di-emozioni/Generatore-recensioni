@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Schede & Recensioni</title>
   <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#7c3aed">
+  <meta name="theme-color" content="#b45309">
   <link rel="stylesheet" href="style.css" />
   <script>
     if ('serviceWorker' in navigator) {
@@ -17,47 +17,60 @@
     }
   </script>
 </head>
-<body>
-  <header class="app-header">
+<body style="background-color: #fbf8f3; font-family: system-ui, -apple-system, sans-serif; color: #333; margin: 0; padding: 16px;">
+  
+  <header class="app-header" style="text-align: center; margin-bottom: 20px;">
     <div class="title-block">
-      <h1>Schede & Recensioni</h1>
-      <p class="subtitle">Bozze rapide e analisi a caldo per il blog</p>
+      <h1 style="font-size: 1.6rem; color: #2c221e; margin-bottom: 4px;">Schede & Recensioni</h1>
+      <p class="subtitle" style="font-size: 0.9rem; color: #7a6e65;">Bozze rapide e analisi a caldo per il blog</p>
     </div>
   </header>
 
-  <main class="app-main">
+  <main class="app-main" style="max-width: 600px; margin: 0 auto;">
+    
+    <!-- Card Dettatura Smart Globale -->
+    <div class="card" style="background: #7c3aed; color: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(124,58,237,0.2); text-align: center;">
+      <div style="font-weight: 600; font-size: 1rem; margin-bottom: 6px; display: flex; align-items: center; justify-content: center; gap: 6px;">
+        🎙️ Dettatura Smart Globale (Ditta a ruota libera)
+      </div>
+      <p style="font-size: 0.8rem; margin: 0; opacity: 0.9; line-height: 1.4;">
+        Pronuncia parole chiave come: "Titolo...", "Autore...", "Genere...", "Citazione..."
+      </p>
+      <button type="button" id="globalDictationBtn" style="background: white; color: #7c3aed; border: none; padding: 8px 16px; border-radius: 20px; font-weight: 600; font-size: 0.85rem; margin-top: 12px; cursor: pointer; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">Avvia Dettatura Globale</button>
+    </div>
+
     <!-- Card Dati del Libro -->
-    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-      <h2 style="font-size: 1.2rem; margin-bottom: 12px;">📚 Dati del Libro</h2>
+    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0eae1;">
+      <h2 style="font-size: 1.15rem; margin-top: 0; margin-bottom: 14px; color: #2c221e;">📚 Dati del Libro</h2>
       
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-        <label>
-          <span style="font-size: 0.9rem; font-weight: 500;">Titolo</span>
-          <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-            <input type="text" id="bookTitle" placeholder="Es. Stoner" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
-            <button type="button" class="field-voice-btn" data-target="bookTitle" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <label style="display: block;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Titolo</span>
+            <button type="button" class="field-voice-btn" data-target="bookTitle" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Titolo">🎙️</button>
           </div>
+          <input type="text" id="bookTitle" placeholder="Es. Stoner" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem;">
         </label>
-        <label>
-          <span style="font-size: 0.9rem; font-weight: 500;">Autore</span>
-          <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-            <input type="text" id="bookAuthor" placeholder="Es. John Williams" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
-            <button type="button" class="field-voice-btn" data-target="bookAuthor" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <label style="display: block;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Autore</span>
+            <button type="button" class="field-voice-btn" data-target="bookAuthor" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Autore">🎙️</button>
           </div>
+          <input type="text" id="bookAuthor" placeholder="Es. John Williams" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem;">
         </label>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
-        <label>
-          <span style="font-size: 0.9rem; font-weight: 500;">Genere</span>
-          <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-            <input type="text" id="bookGenre" placeholder="Es. Classico, Thriller..." style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
-            <button type="button" class="field-voice-btn" data-target="bookGenre" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <label style="display: block;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Genere</span>
+            <button type="button" class="field-voice-btn" data-target="bookGenre" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Genere">🎙️</button>
           </div>
+          <input type="text" id="bookGenre" placeholder="Es. Classico, Thriller, S..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem;">
         </label>
-        <label>
-          <span style="font-size: 0.9rem; font-weight: 500;">Formato</span>
-          <select id="formato" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
+        <label style="display: block;">
+          <span style="font-size: 0.85rem; font-weight: 500; color: #555; display: block; margin-bottom: 4px;">Formato</span>
+          <select id="formato" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem; height: 39px;">
             <option value="Cartaceo">📖 Cartaceo</option>
             <option value="Ebook / Kobo">📱 Ebook / Kobo</option>
             <option value="Audiolibro">🎧 Audiolibro</option>
@@ -65,149 +78,141 @@
         </label>
       </div>
 
-      <!-- Stato / Cartella -->
-      <label style="display: block; margin-bottom: 12px;">
-        <span style="font-size: 0.9rem; font-weight: 500;">Stato / Cartella</span>
-        <select id="stato-libro" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
-          <option value="da-leggere">📚 Da leggere</option>
-          <option value="in-lettura">📖 In Lettura</option>
-          <option value="letto">✅ Letto</option>
-          <option value="archivio-bozze">🗄️ Archivio bozze</option>
-        </select>
-      </label>
-
-      <!-- Copertina e Anteprima -->
-      <label style="display: block; margin-bottom: 8px;">
-        <span style="font-size: 0.9rem; font-weight: 500;">Copertina (URL immagine)</span>
-        <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-          <input type="text" id="copertina" placeholder="Incolla link immagine copertina..." style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
-          <button type="button" class="field-voice-btn" data-target="copertina" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
-        </div>
-      </label>
-      <div class="cover-preview-container" style="margin-top: 4px; margin-bottom: 12px;">
-        <img id="img-anteprima" src="" alt="Anteprima copertina" style="max-width: 100px; display: none; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
+      <div style="margin-bottom: 12px;">
+        <label style="display: block;">
+          <span style="font-size: 0.85rem; font-weight: 500; color: #555; display: block; margin-bottom: 4px;">Stato / Cartella</span>
+          <select id="bookStatus" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem; height: 39px;">
+            <option value="In Lettura">📖 In Lettura</option>
+            <option value="Letti">✅ Letti</option>
+            <option value="Da Leggere">📚 Da Leggere</option>
+            <option value="Abbandonati">📌 Abbandonati</option>
+          </select>
+        </label>
       </div>
 
       <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-        <label>
-          <span style="font-size: 0.9rem; font-weight: 500;">Valutazione (Stelle / Voto)</span>
-          <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-            <input type="text" id="bookRating" placeholder="Es. 5/5 ⭐⭐⭐⭐⭐" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
-            <button type="button" class="field-voice-btn" data-target="bookRating" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <label style="display: block;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Valutazione (Stelle / Voto)</span>
+            <button type="button" class="field-voice-btn" data-target="bookRating" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Valutazione">🎙️</button>
           </div>
+          <input type="text" id="bookRating" placeholder="Es. 5/5 ⭐⭐⭐⭐⭐" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem;">
         </label>
-        <label>
-          <span style="font-size: 0.9rem; font-weight: 500;">Impressione / Emotività</span>
-          <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-            <input type="text" id="bookMood" placeholder="Es. Commovente, Profondo" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
-            <button type="button" class="field-voice-btn" data-target="bookMood" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <label style="display: block;">
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+            <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Impressione / Emotività</span>
+            <button type="button" class="field-voice-btn" data-target="bookMood" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Impressione">🎙️</button>
           </div>
+          <input type="text" id="bookMood" placeholder="Es. Commovente, Prof..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem;">
         </label>
       </div>
     </div>
 
     <!-- Card Impressioni & Analisi a Caldo -->
-    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-      <h2 style="font-size: 1.2rem; margin-bottom: 12px;">✍️ Impressioni & Analisi a Caldo</h2>
+    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0eae1;">
+      <h2 style="font-size: 1.15rem; margin-top: 0; margin-bottom: 14px; color: #2c221e;">✍️ Impressioni & Analisi a Caldo</h2>
       
       <label style="display: block; margin-bottom: 12px;">
-        <span style="font-size: 0.9rem; font-weight: 500;">L'essenza in una frase (Pitch)</span>
-        <div style="display: flex; gap: 6px; align-items: flex-start; margin-top: 4px;">
-          <textarea id="bookPitch" placeholder="Di cosa parla veramente questo libro?" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd; min-height: 60px;"></textarea>
-          <button type="button" class="field-voice-btn" data-target="bookPitch" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span style="font-size: 0.85rem; font-weight: 500; color: #555;">L'essenza in una frase (Pitch)</span>
+          <button type="button" class="field-voice-btn" data-target="bookPitch" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Pitch">🎙️️</button>
         </div>
+        <input type="text" id="bookPitch" placeholder="Di cosa parla veramente questo libro?" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem;">
       </label>
 
       <label style="display: block; margin-bottom: 12px;">
-        <span style="font-size: 0.9rem; font-weight: 500;">Punti di Forza</span>
-        <div style="display: flex; gap: 6px; align-items: flex-start; margin-top: 4px;">
-          <textarea id="strengths" placeholder="Cosa ti ha colpito di più? (stile, personaggi, colpi di scena...)" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd; min-height: 60px;"></textarea>
-          <button type="button" class="field-voice-btn" data-target="strengths" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Punti di Forza</span>
+          <button type="button" class="field-voice-btn" data-target="strengths" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Punti di Forza">🎙️</button>
         </div>
+        <textarea id="strengths" placeholder="Cosa ti ha colpito di più? (stile, personaggi, colpi di scena...)" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; min-height: 70px; box-sizing: border-box; background: #fff; font-size: 0.9rem;"></textarea>
       </label>
 
       <label style="display: block; margin-bottom: 12px;">
-        <span style="font-size: 0.9rem; font-weight: 500;">Punti Deboli / Note critiche</span>
-        <div style="display: flex; gap: 6px; align-items: flex-start; margin-top: 4px;">
-          <textarea id="weaknesses" placeholder="Cosa non ti ha convinto o cosa tenere a mente..." style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd; min-height: 60px;"></textarea>
-          <button type="button" class="field-voice-btn" data-target="weaknesses" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Punti Deboli / Note critiche</span>
+          <button type="button" class="field-voice-btn" data-target="weaknesses" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Punti Deboli">🎙️</button>
         </div>
+        <textarea id="weaknesses" placeholder="Cosa non ti ha convinto o cosa tenere a mente..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; min-height: 70px; box-sizing: border-box; background: #fff; font-size: 0.9rem;"></textarea>
       </label>
 
       <label style="display: block; margin-bottom: 12px;">
-        <span style="font-size: 0.9rem; font-weight: 500;">Personaggi e Temi principali</span>
-        <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-          <input type="text" id="themes" placeholder="Es. Solitudine, riscatto, identità" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
-          <button type="button" class="field-voice-btn" data-target="themes" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Personaggi e Temi principali</span>
+          <button type="button" class="field-voice-btn" data-target="themes" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Temi">🎙️</button>
         </div>
+        <input type="text" id="themes" placeholder="Es. Solitudine, riscatto, identità" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem;">
       </label>
 
       <label style="display: block; margin-bottom: 12px;">
-        <span style="font-size: 0.9rem; font-weight: 500;">Citazione Simbolo</span>
-        <div style="display: flex; gap: 6px; align-items: flex-start; margin-top: 4px;">
-          <textarea id="keyQuote" placeholder="Incolla qui la citazione più bella..." style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd; min-height: 60px;"></textarea>
-          <button type="button" class="field-voice-btn" data-target="keyQuote" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Citazione Simbolo</span>
+          <button type="button" class="field-voice-btn" data-target="keyQuote" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Citazione">🎙️</button>
         </div>
+        <textarea id="keyQuote" placeholder="Incolla qui la citazione più bella..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; min-height: 60px; box-sizing: border-box; background: #fff; font-size: 0.9rem;"></textarea>
       </label>
 
       <label style="display: block;">
-        <span style="font-size: 0.9rem; font-weight: 500;">A chi lo consiglio (Target)</span>
-        <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-          <input type="text" id="targetAudience" placeholder="Es. Amanti dei classici introspettivi" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
-          <button type="button" class="field-voice-btn" data-target="targetAudience" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span style="font-size: 0.85rem; font-weight: 500; color: #555;">A chi lo consiglio (Target)</span>
+          <button type="button" class="field-voice-btn" data-target="targetAudience" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Target">🎙️</button>
         </div>
+        <input type="text" id="targetAudience" placeholder="Es. Amanti dei classici introspettivi" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem;">
       </label>
     </div>
 
     <!-- Card Tag & Hashtag Rapidi -->
-    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-      <h2 style="font-size: 1.2rem; margin-bottom: 12px;">🏷️ Tag & Hashtag Rapidi</h2>
-      <p style="font-size: 0.85rem; color: #666; margin-bottom: 12px;">Tocca per selezionare i tag o usa il tasto vocale.</p>
+    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0eae1;">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+        <h2 style="font-size: 1.15rem; margin: 0; color: #2c221e;">🏷️ Tag & Hashtag Rapidi</h2>
+        <button type="button" id="suggestTagsBtn" style="background: #6b46c1; color: white; border: none; padding: 6px 12px; border-radius: 16px; font-size: 0.75rem; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">✨ Suggerisci Tag</button>
+      </div>
+      <p style="font-size: 0.8rem; color: #7a6e65; margin-bottom: 12px;">Tocca per selezionare i tag o usa il tasto magico.</p>
       
-      <div style="margin-bottom: 8px; font-size: 0.85rem; font-weight: 500; color: #444;">Generi / Categorie:</div>
-      <div class="tag-pills" id="genrePills" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
-        <button type="button" class="tag-pill" data-tag="#narrativa" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#narrativa</button>
-        <button type="button" class="tag-pill" data-tag="#classici" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#classici</button>
-        <button type="button" class="tag-pill" data-tag="#thriller" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#thriller</button>
-        <button type="button" class="tag-pill" data-tag="#saggistica" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#saggistica</button>
-        <button type="button" class="tag-pill" data-tag="#storico" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#storico</button>
-        <button type="button" class="tag-pill" data-tag="#psicologico" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#psicologico</button>
+      <div style="margin-bottom: 6px; font-size: 0.8rem; font-weight: 600; color: #555;">Generi / Categorie:</div>
+      <div class="tag-pills" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
+        <button type="button" class="tag-pill" data-tag="#narrativa" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#narrativa</button>
+        <button type="button" class="tag-pill" data-tag="#classici" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#classici</button>
+        <button type="button" class="tag-pill" data-tag="#thriller" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#thriller</button>
+        <button type="button" class="tag-pill" data-tag="#saggistica" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#saggistica</button>
+        <button type="button" class="tag-pill" data-tag="#storico" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#storico</button>
+        <button type="button" class="tag-pill" data-tag="#psicologico" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#psicologico</button>
       </div>
 
-      <div style="margin-bottom: 8px; font-size: 0.85rem; font-weight: 500; color: #444;">Instagram / Social:</div>
-      <div class="tag-pills" id="socialPills" style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px;">
-        <button type="button" class="tag-pill" data-tag="#lecodellepagine" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#lecodellepagine</button>
-        <button type="button" class="tag-pill" data-tag="#bookstagramitalia" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#bookstagramitalia</button>
-        <button type="button" class="tag-pill" data-tag="#consiglidilettura" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#consiglidilettura</button>
-        <button type="button" class="tag-pill" data-tag="#recensionilibri" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#recensionilibri</button>
-        <button type="button" class="tag-pill" data-tag="#leggerechepassione" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#leggerechepassione</button>
-        <button type="button" class="tag-pill" data-tag="#storiadilettura" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#storiadilettura</button>
+      <div style="margin-bottom: 6px; font-size: 0.8rem; font-weight: 600; color: #555;">Instagram / Social:</div>
+      <div class="tag-pills" style="display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px;">
+        <button type="button" class="tag-pill" data-tag="#lecodellepagine" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#lecodellepagine</button>
+        <button type="button" class="tag-pill" data-tag="#bookstagramitalia" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#bookstagramitalia</button>
+        <button type="button" class="tag-pill" data-tag="#consiglidilettura" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#consiglidilettura</button>
+        <button type="button" class="tag-pill" data-tag="#recensionilibri" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#recensionilibri</button>
+        <button type="button" class="tag-pill" data-tag="#leggerechepassione" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#leggerechepassione</button>
+        <button type="button" class="tag-pill" data-tag="#storiadilettura" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #e2d9ce; background: #faf6f0; font-size: 0.8rem; cursor: pointer; color: #444;">#storiadilettura</button>
       </div>
 
       <label style="display: block;">
-        <span style="font-size: 0.9rem; font-weight: 500;">Altri Tag personalizzati (separati da spazio)</span>
-        <div style="display: flex; gap: 6px; align-items: center; margin-top: 4px;">
-          <input type="text" id="customTags" placeholder="Es. #nativi #storia #capolavoro" style="flex: 1; padding: 8px; border-radius: 6px; border: 1px solid #ddd;">
-          <button type="button" class="field-voice-btn" data-target="customTags" style="background: #7c3aed; color: white; border: none; padding: 8px 10px; border-radius: 6px; cursor: pointer;" title="Detta in questo campo">🎙️</button>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+          <span style="font-size: 0.85rem; font-weight: 500; color: #555;">Altri Tag personalizzati (separati da spazio)</span>
+          <button type="button" class="field-voice-btn" data-target="customTags" style="background: none; border: none; cursor: pointer; font-size: 1rem; padding: 0;" title="Detta Tag">🎙️</button>
         </div>
+        <input type="text" id="customTags" placeholder="Es. #nativi #storia #capolavoro" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; box-sizing: border-box; background: #fff; font-size: 0.9rem;">
       </label>
     </div>
 
-    <!-- Bottoni Azione -->
-    <div class="actions-card" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
-      <button id="sendObsidianBtn" style="background-color: #d97706; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">📝 Formatta e Invia a Obsidian</button>
-      <button id="copyHtmlBtn" style="background-color: #3b82f6; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">🌐 Formatta per Blog / HTML</button>
-      <button id="clearBtn" style="background-color: #ef4444; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer;">🗑️ Svuota Campi</button>
+    <!-- Bottoni Azione Principali -->
+    <div class="actions-card" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+      <button id="sendObsidianBtn" style="background-color: #b45309; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem; box-shadow: 0 2px 4px rgba(180,83,9,0.2);">📝 Formatta e Invia a Obsidian</button>
+      <button id="copyHtmlBtn" style="background-color: #d1bfa7; color: #2c221e; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">🌐 Formatta per Blog / HTML</button>
+      <button id="clearBtn" style="background-color: #ffffff; color: #7a6e65; border: 1px solid #e2d9ce; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">🗑️ Svuota Campi</button>
     </div>
 
     <!-- Card Scheda Generata -->
-    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
-      <h2 style="font-size: 1.2rem; margin-bottom: 12px;">📄 Scheda Generata</h2>
-      <textarea id="outputArea" readonly placeholder="Il testo formattato apparirà qui..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; min-height: 120px; font-family: monospace;"></textarea>
+    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,0.04); border: 1px solid #f0eae1;">
+      <h2 style="font-size: 1.15rem; margin-top: 0; margin-bottom: 12px; color: #2c221e;">📄 Scheda Generata</h2>
+      <textarea id="outputArea" readonly placeholder="Il testo formattato apparirà qui..." style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #e2d9ce; min-height: 120px; font-family: monospace; box-sizing: border-box; background: #faf6f0; font-size: 0.85rem;"></textarea>
       
       <div style="display: flex; gap: 10px; margin-top: 12px;">
-        <button id="copyBtn" style="flex: 1; background-color: #6b7280; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer;">📋 Copia negli Appunti</button>
-        <button id="downloadBtn" style="flex: 1; background-color: #059669; color: white; border: none; padding: 10px; border-radius: 6px; font-weight: bold; cursor: pointer;">💾 Scarica (.md)</button>
+        <button id="copyBtn" style="flex: 1; background-color: #e5dfd7; color: #2c221e; border: none; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem;">📋 Copia negli Appunti</button>
+        <button id="downloadBtn" style="flex: 1; background-color: #e5dfd7; color: #2c221e; border: none; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.9rem;">💾 Scarica (.md)</button>
       </div>
     </div>
   </main>
