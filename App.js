@@ -292,6 +292,21 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     if (testoLower.includes('punti di forza') || testoLower.includes('pregi')) {
       const v = testo.split(/punti di forza|pregi/i)[1]?.split(/titolo|autore|genere|citazione/i)[0]?.trim();
       if (v) document.getElementById('strengths').value = v;
+      const inputCopertina = document.getElementById('copertina');
+const imgAnteprima = document.getElementById('img-anteprima');
+
+if (inputCopertina && imgAnteprima) {
+  inputCopertina.addEventListener('input', (e) => {
+    const url = e.target.value.trim();
+    if (url) {
+      imgAnteprima.src = url;
+      imgAnteprima.style.display = 'block';
+    } else {
+      imgAnteprima.style.display = 'none';
+    }
+  });
+}
+      
     }
   }
 });
