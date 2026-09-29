@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Generatore Schede Libro</title>
+  <title>Schede & Recensioni</title>
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#7c3aed">
   <link rel="stylesheet" href="style.css" />
@@ -22,52 +22,126 @@
   <header class="app-header">
     <div class="title-block">
       <h1>Schede & Recensioni</h1>
-      <p class="subtitle">Bozze rapide e analisi</p>
+      <p class="subtitle">Bozze rapide e analisi a caldo per il blog</p>
     </div>
   </header>
 
   <main class="app-main">
-    <div class="form-container">
-      <!-- Formato -->
-      <label>
-        <span>Formato</span>
-        <select id="formato">
-          <option value="Cartaceo">📖 Cartaceo</option>
-          <option value="Ebook / Kobo">📱 Ebook / Kobo</option>
-          <option value="Audiolibro">🎧 Audiolibro</option>
-        </select>
-      </label>
+    <!-- Banner Dettatura Smart Globale -->
+    <div class="card global-voice-card" style="background-color: #7c3aed22; padding: 16px; border-radius: 12px; margin-bottom: 16px; text-align: center;">
+      <button id="globalVoiceBtn" style="background-color: #7c3aed; color: white; border: none; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 1rem; cursor: pointer;">
+        🎙️ Dettatura Smart Globale (Ditta a ruota libera)
+      </button>
+      <p style="font-size: 0.85rem; color: #555; margin-top: 8px;">Pronuncia parole chiave come: "Titolo...", "Autore...", "Genere...", "Citazione..."</p>
+    </div>
 
-      <!-- Stato / Cartella aggiornato -->
-      <label>
-        <span>Stato / Cartella</span>
-        <select id="stato-libro">
+    <!-- Card Dati del Libro -->
+    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+      <h2 style="font-size: 1.2rem; margin-bottom: 12px;">📚 Dati del Libro</h2>
+      
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+        <label>
+          <span style="font-size: 0.9rem; font-weight: 500;">Titolo</span>
+          <input type="text" id="bookTitle" placeholder="Es. Stoner" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
+        </label>
+        <label>
+          <span style="font-size: 0.9rem; font-weight: 500;">Autore</span>
+          <input type="text" id="bookAuthor" placeholder="Es. John Williams" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
+        </label>
+      </div>
+
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;">
+        <label>
+          <span style="font-size: 0.9rem; font-weight: 500;">Genere</span>
+          <input type="text" id="bookGenre" placeholder="Es. Classico..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
+        </label>
+        <label>
+          <span style="font-size: 0.9rem; font-weight: 500;">Formato</span>
+          <select id="formato" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
+            <option value="Cartaceo">📖 Cartaceo</option>
+            <option value="Ebook / Kobo">📱 Ebook / Kobo</option>
+            <option value="Audiolibro">🎧 Audiolibro</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- Stato / Cartella con le nuove opzioni -->
+      <label style="display: block; margin-bottom: 12px;">
+        <span style="font-size: 0.9rem; font-weight: 500;">Stato / Cartella</span>
+        <select id="stato-libro" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
           <option value="da-leggere">📚 Da leggere</option>
-          <option value="in-corso">📖 In lettura</option>
-          <option value="letti">✅ Letti</option>
+          <option value="in-lettura">📖 In Lettura</option>
+          <option value="letto">✅ Letto</option>
           <option value="archivio-bozze">🗄️ Archivio bozze</option>
         </select>
       </label>
 
       <!-- Box Copertina e Anteprima -->
-      <label>
-        <span>Copertina (URL immagine)</span>
-        <input type="text" id="copertina" placeholder="Incolla link immagine copertina...">
+      <label style="display: block; margin-bottom: 8px;">
+        <span style="font-size: 0.9rem; font-weight: 500;">Copertina (URL immagine)</span>
+        <input type="text" id="copertina" placeholder="Incolla link immagine copertina..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
       </label>
       <div class="cover-preview-container" style="margin-top: 8px; margin-bottom: 12px;">
-        <img id="img-anteprima" src="" alt="Anteprima copertina" style="max-width: 100px; display: none; border-radius: 6px;" />
+        <img id="img-anteprima" src="" alt="Anteprima copertina" style="max-width: 100px; display: none; border-radius: 6px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" />
       </div>
 
-      <div class="grid-2">
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
         <label>
-          <span>Valutazione (Stelle / Voto)</span>
-          <input type="text" id="bookRating" placeholder="Es. ⭐⭐⭐⭐⭐ o 9/10">
+          <span style="font-size: 0.9rem; font-weight: 500;">Valutazione (Stelle / Voto)</span>
+          <input type="text" id="bookRating" placeholder="Es. ⭐⭐⭐⭐⭐" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
         </label>
         <label>
-          <span>Impressione / Emotività</span>
-          <input type="text" id="bookMood" placeholder="Es. Intenso, riflessivo...">
+          <span style="font-size: 0.9rem; font-weight: 500;">Impressione / Emotività</span>
+          <input type="text" id="bookMood" placeholder="Es. Intenso..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
         </label>
       </div>
+    </div>
+
+    <!-- Card Impressioni & Analisi -->
+    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+      <h2 style="font-size: 1.2rem; margin-bottom: 12px;">✍️ Impressioni & Analisi</h2>
+      <label style="display: block; margin-bottom: 12px;">
+        <span style="font-size: 0.9rem; font-weight: 500;">L'essenza in una frase (Pitch)</span>
+        <textarea id="bookPitch" placeholder="Sintesi accattivante..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px; min-height: 60px;"></textarea>
+      </label>
+      <label style="display: block; margin-bottom: 12px;">
+        <span style="font-size: 0.9rem; font-weight: 500;">Citazione chiave</span>
+        <textarea id="keyQuote" placeholder="Inserisci una citazione memorabile..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px; min-height: 60px;"></textarea>
+      </label>
+      <label style="display: block;">
+        <span style="font-size: 0.9rem; font-weight: 500;">Punti di forza</span>
+        <textarea id="strengths" placeholder="Quali sono i punti di forza?..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px; min-height: 60px;"></textarea>
+      </label>
+    </div>
+
+    <!-- Card Social / Tag -->
+    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+      <h2 style="font-size: 1.2rem; margin-bottom: 12px;">Instagram / Social:</h2>
+      <div class="tag-pills" id="tagPills" style="display: flex; flex-wrap: wrap; gap: 8px;">
+        <button type="button" class="tag-pill" data-tag="#lecodellepagine" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#lecodellepagine</button>
+        <button type="button" class="tag-pill" data-tag="#bookstagramitalia" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#bookstagramitalia</button>
+        <button type="button" class="tag-pill" data-tag="#consiglidilettura" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#consiglidilettura</button>
+        <button type="button" class="tag-pill" data-tag="#recensionilibri" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#recensionilibri</button>
+        <button type="button" class="tag-pill" data-tag="#leggerechepassione" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#leggerechepassione</button>
+        <button type="button" class="tag-pill" data-tag="#storiadilettura" style="padding: 6px 12px; border-radius: 16px; border: 1px solid #ddd; background: #f9f9f9; font-size: 0.85rem; cursor: pointer;">#storiadilettura</button>
+      </div>
+      <label style="display: block; margin-top: 12px;">
+        <span style="font-size: 0.9rem; font-weight: 500;">Altri Tag personalizzati (separati da spazio)</span>
+        <input type="text" id="customTags" placeholder="Es. #nativi #storia #capolavoro" style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; margin-top: 4px;">
+      </label>
+    </div>
+
+    <!-- Bottoni Azione -->
+    <div class="actions-card" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px;">
+      <button id="sendObsidianBtn" style="background-color: #d97706; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">📝 Formatta e Invia a Obsidian</button>
+      <button id="copyHtmlBtn" style="background-color: #3b82f6; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer;">🌐 Formatta per Blog / HTML</button>
+      <button id="clearBtn" style="background-color: #ef4444; color: white; border: none; padding: 10px; border-radius: 8px; font-weight: bold; cursor: pointer;">🗑️ Svuota Campi</button>
+    </div>
+
+    <!-- Card Scheda Generata -->
+    <div class="card" style="background: white; padding: 16px; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+      <h2 style="font-size: 1.2rem; margin-bottom: 12px;">📄 Scheda Generata</h2>
+      <textarea id="outputArea" readonly placeholder="Il testo formattato apparirà qui..." style="width: 100%; padding: 8px; border-radius: 6px; border: 1px solid #ddd; min-height: 120px; font-family: monospace;"></textarea>
     </div>
   </main>
 
