@@ -9,7 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusMsg = document.getElementById("status");
   const btnVoiceGlobal = document.getElementById("btnVoiceGlobal");
 
-  // --- GESTIONE ANTEPRIMA COPERTINA (Spostata al livello principale) ---
+  // --- GESTIONE ANTEPRIMA COPERTINA ---
   const inputCopertina = document.getElementById('copertina');
   const imgAnteprima = document.getElementById('img-anteprima');
 
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // --- INTEGRATORE RICONOSCIMENTO VOCALE (Inizializzazione Unica per Mobile) ---
+  // --- RICONOSCIMENTO VOCALE (Aggiornato con richiesta permessi audio per PWA) ---
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recognition = null;
 
@@ -36,9 +36,19 @@ document.addEventListener("DOMContentLoaded", () => {
     recognition.interimResults = false;
   }
 
-  function avviaRiconoscimentoVocale(callback) {
+  async function avviaRiconoscimentoVocale(callback) {
     if (!recognition) {
       alert("Il riconoscimento vocale non è supportato su questo browser.");
+      return;
+    }
+
+    // Chiede l'autorizzazione audio ad Android per sbloccare i permessi della PWA
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      stream.getTracks().forEach(track => track.stop());
+    } catch (err) {
+      console.error("Permesso microfono negato:", err);
+      showStatus("❌ Permesso microfono negato. Controlla le impostazioni.");
       return;
     }
 
@@ -201,7 +211,7 @@ ${data.strengths || "Nessun punto inserito."}
 ### ⚠️ Punti Deboli / Note
 ${data.weaknesses || "Nessun punto debole evidenziato."}
 
-### 🗝️ Temi e Personaggi Chiave
+### 🗝️️ Temi e Personaggi Chiave
 ${data.themes}
 
 ### 💬 Citazione Simbolo
@@ -269,7 +279,7 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     showStatus("File .md scaricato! 💾");
   });
 
-  btnClear.addEventListener("click", () => {
+      btnClear.addEventListener("click", () => {
     document.querySelectorAll("input, textarea").forEach(input => input.value = "");
     document.querySelectorAll(".tag-chip").forEach(chip => chip.classList.remove("selected"));
     outputArea.value = "";
@@ -306,3 +316,4 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     }
   }
 });
+      
