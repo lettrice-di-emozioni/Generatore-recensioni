@@ -5,165 +5,70 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Generatore Schede Libro</title>
   <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#7c3aed">
-  
+  <meta name="theme-color" content="#7c3aed">
   <link rel="stylesheet" href="style.css" />
-  <meta name="theme-color" content="#f5e9d8" />
-</head>
+  <meta name="theme-color" content="#f5e9d8">
   <script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('/sw.js')
-        .then(() => console.log("Service Worker registrato con successo!"))
-        .catch((err) => console.log("Errore registrazione Service Worker:", err));
-    });
-  }
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(() => console.log("Service Worker registrato con successo!"))
+          .catch((err) => console.log("Errore registrazione Service Worker:", err));
+      });
+    }
   </script>
+</head>
 <body>
   <header class="app-header">
     <div class="title-block">
       <h1>Schede & Recensioni</h1>
-      <p class="subtitle">Bozze rapide e analisi a caldo per il blog</p>
+      <p class="subtitle">Bozze rapide e analisi</p>
     </div>
   </header>
 
   <main class="app-main">
-    <!-- Comando Vocale Smart Globale -->
-    <section class="card-section" style="text-align: center; background-color: #fdf8f0;">
-      <button type="button" id="btnVoiceGlobal" class="magic-btn" style="width: 100%; font-size: 1.1rem; padding: 12px;">
-        🎙️ Dettatura Smart Globale (Ditta a ruota libera)
-      </button>
-      <p class="subtitle" style="margin-top: 6px; font-size: 0.85rem;">
-        Pronuncia parole chiave come: <em>"Titolo...", "Autore...", "Genere...", "Citazione..."</em>
-      </p>
-    </section>
+    <div class="form-container">
+      <!-- Formato -->
+      <label>
+        <span>Formato</span>
+        <select id="formato">
+          <option value="Cartaceo">📖 Cartaceo</option>
+          <option value="Ebook / Kobo">📱 Ebook / Kobo</option>
+          <option value="Audiolibro">🎧 Audiolibro</option>
+        </select>
+      </label>
 
-    <!-- Dati Libro -->
-    <section class="card-section">
-      <h2>📚 Dati del Libro</h2>
+      <!-- Stato / Cartella aggiornato -->
+      <label>
+        <span>Stato / Cartella</span>
+        <select id="stato-libro">
+          <option value="da-leggere">📚 Da leggere</option>
+          <option value="in-corso">📖 In lettura</option>
+          <option value="letti">✅ Letti</option>
+          <option value="archivio-bozze">🗄️ Archivio bozze</option>
+        </select>
+      </label>
+
+      <!-- Box Copertina e Anteprima -->
+      <label>
+        <span>Copertina (URL immagine)</span>
+        <input type="text" id="copertina" placeholder="Incolla link immagine copertina...">
+      </label>
+      <div class="cover-preview-container" style="margin-top: 8px; margin-bottom: 12px;">
+        <img id="img-anteprima" src="" alt="Anteprima copertina" style="max-width: 100px; display: none; border-radius: 6px;" />
+      </div>
+
       <div class="grid-2">
         <label>
-          <span>Titolo <button type="button" data-voice-for="bookTitle" title="Detta Titolo">🎙️</button></span>
-          <input type="text" id="bookTitle" placeholder="Es. Stoner" />
+          <span>Valutazione (Stelle / Voto)</span>
+          <input type="text" id="bookRating" placeholder="Es. ⭐⭐⭐⭐⭐ o 9/10">
         </label>
         <label>
-          <span>Autore <button type="button" data-voice-for="bookAuthor" title="Detta Autore">🎙️</button></span>
-          <input type="text" id="bookAuthor" placeholder="Es. John Williams" />
+          <span>Impressione / Emotività</span>
+          <input type="text" id="bookMood" placeholder="Es. Intenso, riflessivo...">
         </label>
       </div>
-      <div class="grid-2">
-        <label>
-          <span>Genere <button type="button" data-voice-for="bookGenre" title="Detta Genere">🎙️</button></span>
-          <input type="text" id="bookGenre" placeholder="Es. Classico, Thriller, Storico" />
-        </label>
-        <label>
-          <span>Formato</span>
-          <select id="bookFormat">
-            <option value="Cartaceo">📖 Cartaceo</option>
-            <option value="Ebook / Kobo">📱 Ebook / Kobo</option>
-            <option value="Audiolibro">🎧 Audiolibro</option>
-          </select>
-        </label>
-      </div>
-              <label>
-            <span>Stato / Cartella</span>
-            <select id="stato-libro">
-                <option value="in-lettura">📖 In Lettura</option>
-                <option value="letto">✅ Letto</option>
-            </select>
-              </label>
-      <div class="grid-2">
-        <label>
-          <span>Valutazione (Stelle / Voto) <button type="button" data-voice-for="bookRating" title="Detta Voto">🎙️</button></span>
-          <input type="text" id="bookRating" placeholder="Es. 5/5 ⭐⭐⭐⭐⭐" />
-        </label>
-        <label>
-          <span>Impressione / Emotività <button type="button" data-voice-for="bookMood" title="Detta Emotività">🎙️</button></span>
-          <input type="text" id="bookMood" placeholder="Es. Commovente, Profondo 😭" />
-        </label>
-      </div>
-    </section>
-
-    <!-- Impressioni & Analisi -->
-    <section class="card-section">
-      <h2>✍️ Impressioni & Analisi a Caldo</h2>
-      <label>
-        <span>L'essenza in una frase (Pitch) <button type="button" data-voice-for="pitch" title="Detta Pitch">🎙️</button></span>
-        <input type="text" id="pitch" placeholder="Di cosa parla veramente questo libro?" />
-      </label>
-      <label>
-        <span>Punti di Forza <button type="button" data-voice-for="strengths" title="Detta Punti di Forza">🎙️</button></span>
-        <textarea id="strengths" rows="3" placeholder="Cosa ti ha colpito di più? (stile, personaggi, colpi di scena...)"></textarea>
-      </label>
-      <label>
-        <span>Punti Deboli / Note critiche <button type="button" data-voice-for="weaknesses" title="Detta Punti Deboli">🎙️</button></span>
-        <textarea id="weaknesses" rows="2" placeholder="Cosa non ti ha convinto o cosa tenere a mente..."></textarea>
-      </label>
-      <label>
-        <span>Personaggi e Temi principali <button type="button" data-voice-for="themes" title="Detta Temi">🎙️</button></span>
-        <input type="text" id="themes" placeholder="Es. Solitudine, riscatto, identità" />
-      </label>
-      <label>
-        <span>Citazione Simbolo <button type="button" data-voice-for="keyQuote" title="Detta Citazione">🎙️</button></span>
-        <textarea id="keyQuote" rows="2" placeholder="Incolla qui la citazione più bella..."></textarea>
-      </label>
-      <label>
-        <span>A chi lo consiglio (Target) <button type="button" data-voice-for="targetAudience" title="Detta Target">🎙️</button></span>
-        <input type="text" id="targetAudience" placeholder="Es. Amanti dei classici introspettivi" />
-      </label>
-    </section>
-
-    <!-- Sezione Tag e Hashtag -->
-    <section class="card-section">
-      <div class="section-header-flex">
-        <h2>🏷️ Tag & Hashtag Rapidi</h2>
-        <button type="button" id="btnAutoTag" class="magic-btn">🪄 Suggerisci Tag</button>
-      </div>
-      <p class="subtitle" style="margin-bottom:12px;">Tocca per selezionare i tag o usa il tasto magico.</p>
-      
-      <div class="tag-group">
-        <span>Generi / Categorie:</span>
-        <button type="button" class="tag-chip" data-tag="narrativa">#narrativa</button>
-        <button type="button" class="tag-chip" data-tag="classici">#classici</button>
-        <button type="button" class="tag-chip" data-tag="thriller">#thriller</button>
-        <button type="button" class="tag-chip" data-tag="saggistica">#saggistica</button>
-        <button type="button" class="tag-chip" data-tag="storico">#storico</button>
-        <button type="button" class="tag-chip" data-tag="psicologico">#psicologico</button>
-      </div>
-
-      <div class="tag-group">
-        <span>Instagram / Social:</span>
-        <button type="button" class="tag-chip" data-tag="lecodellepagine">#lecodellepagine</button>
-        <button type="button" class="tag-chip" data-tag="bookstagramitalia">#bookstagramitalia</button>
-        <button type="button" class="tag-chip" data-tag="consiglidilettura">#consiglidilettura</button>
-        <button type="button" class="tag-chip" data-tag="recensionilibri">#recensionilibri</button>
-        <button type="button" class="tag-chip" data-tag="leggerechepassione">#leggerechepassione</button>
-        <button type="button" class="tag-chip" data-tag="storiadilettura">#storiadilettura</button>
-      </div>
-
-      <label style="margin-top: 12px;">
-        <span>Altri Tag personalizzati (separati da spazio) <button type="button" data-voice-for="customTags" title="Detta Tag">🎙️</button></span>
-        <input type="text" id="customTags" placeholder="Es. #nativi #storia #capolavoro" />
-      </label>
-    </section>
-
-    <!-- Azioni & Generazione -->
-    <section class="actions-section">
-      <button id="btnObsidian" class="primary-btn">📝 Formatta e Invia a Obsidian</button>
-      <button id="btnBlog" class="secondary-btn">🌐 Formatta per Blog / HTML</button>
-      <button id="btnClear" class="outline-btn">🗑️ Svuota Campi</button>
-    </section>
-
-    <!-- Anteprima Risultato -->
-    <section class="result-section">
-      <h2>📄 Scheda Generata</h2>
-      <textarea id="outputArea" rows="12" readonly placeholder="Il testo formattato apparirà qui..."></textarea>
-      <div class="output-actions">
-        <button id="btnCopy" class="action-btn">📋 Copia negli Appunti</button>
-        <button id="btnDownload" class="action-btn">💾 Scarica (.md)</button>
-      </div>
-      <div id="status" class="status-msg"></div>
-    </section>
+    </div>
   </main>
 
   <script src="App.js"></script>
