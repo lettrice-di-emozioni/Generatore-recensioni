@@ -10,6 +10,15 @@
   <link rel="stylesheet" href="style.css" />
   <meta name="theme-color" content="#f5e9d8" />
 </head>
+  <script>
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js')
+        .then(() => console.log("Service Worker registrato con successo!"))
+        .catch((err) => console.log("Errore registrazione Service Worker:", err));
+    });
+  }
+  </script>
 <body>
   <header class="app-header">
     <div class="title-block">
