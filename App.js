@@ -9,6 +9,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const statusMsg = document.getElementById("status");
   const btnVoiceGlobal = document.getElementById("btnVoiceGlobal");
 
+  // --- GESTIONE ANTEPRIMA COPERTINA (Spostata al livello principale) ---
+  const inputCopertina = document.getElementById('copertina');
+  const imgAnteprima = document.getElementById('img-anteprima');
+
+  if (inputCopertina && imgAnteprima) {
+    inputCopertina.addEventListener('input', (e) => {
+      const url = e.target.value.trim();
+      if (url) {
+        imgAnteprima.src = url;
+        imgAnteprima.style.display = 'block';
+      } else {
+        imgAnteprima.style.display = 'none';
+      }
+    });
+  }
+
   // --- INTEGRATORE RICONOSCIMENTO VOCALE (Inizializzazione Unica per Mobile) ---
   const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
   let recognition = null;
@@ -26,7 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    // Ferma eventuali sessioni precedenti per evitare conflitti su Android
     try { recognition.stop(); } catch(e) {}
 
     showStatus("🎙️ Ascolto in corso... parla pure!");
@@ -45,9 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     };
 
-    recognition.onend = () => {
-      // Pulisce lo stato quando finisce di ascoltare
-    };
+    recognition.onend = () => {};
 
     try {
       recognition.start();
@@ -59,7 +72,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Ascolto sui singoli microfoni legati agli input
   const voiceButtons = document.querySelectorAll("[data-voice-for]");
   voiceButtons.forEach(btn => {
-    // Impedisce al bottone di inviare form o fare bubbling sul label parent
     btn.setAttribute("type", "button");
     
     btn.addEventListener("click", (e) => {
@@ -153,10 +165,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Formattazione per Obsidian
   btnObsidian.addEventListener("click", () => {
-      // Leggi lo stato selezionato per decidere la cartella
-  const selectStato = document.getElementById('stato-libro');
-  const stato = selectStato ? selectStato.value : 'in-lettura';
-  let cartellaDestinazione = (stato === 'letto') ? 'Letti/' : 'In Lettura/';
+    const selectStato = document.getElementById('stato-libro');
+    const stato = selectStato ? selectStato.value : 'in-lettura';
+    let cartellaDestinazione = (stato === 'letto') ? 'Letti/' : 'In Lettura/';
     
     const data = getFormData();
     
@@ -292,22 +303,6 @@ ${data.weaknesses ? `<h3>Aspetti meno convincenti</h3><p>${data.weaknesses}</p>`
     if (testoLower.includes('punti di forza') || testoLower.includes('pregi')) {
       const v = testo.split(/punti di forza|pregi/i)[1]?.split(/titolo|autore|genere|citazione/i)[0]?.trim();
       if (v) document.getElementById('strengths').value = v;
-      const inputCopertina = document.getElementById('copertina');
-const imgAnteprima = document.getElementById('img-anteprima');
-
-if (inputCopertina && imgAnteprima) {
-  inputCopertina.addEventListener('input', (e) => {
-    const url = e.target.value.trim();
-    if (url) {
-      imgAnteprima.src = url;
-      imgAnteprima.style.display = 'block';
-    } else {
-      imgAnteprima.style.display = 'none';
-    }
-  });
-}
-      
     }
   }
 });
-    
