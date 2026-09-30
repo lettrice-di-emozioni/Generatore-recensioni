@@ -1,113 +1,149 @@
-// ==========================================
-// Gestione del Riconoscimento Vocale Multi-Campo
-// ==========================================
-
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Controllo supporto API nel browser
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-        console.warn("Il riconoscimento vocale non è supportato da questo browser.");
-        // Nasconde tutti i microfoni se il browser non supporta la funzione
-        document.querySelectorAll('.mic-btn').forEach(btn => btn.style.display = 'none');
+        console.warn("Riconoscimento vocale non supportato.");
         return;
     }
 
-    // 2. Configurazione riconoscimento vocale
     const recognition = new SpeechRecognition();
     recognition.lang = 'it-IT';
-    recognition.interimResults = false; // Evita parole ripetute
+    recognition.interimResults = false;
     recognition.continuous = false;
 
     let isListening = false;
     let micPermissionGranted = false;
-    let currentInputField = null;
-    let currentActiveButton = null;
+    let currentTargetField = null;
+    let isGlobalMode = false;
 
-    // 3. Funzione che forza la comparsa del popup dei permessi su Chrome / Safari
-    async function requestMicrophoneAccess() {
+    // Forza il popup dei permessi
+    async function requestMicAccess() {
         try {
             const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-            // Chiude subito la traccia: serviva solo per ottenere l'autorizzazione di sistema
-            stream.getTracks().forEach(track => track.stop());
+            stream.getTracks().forEach(t => t.stop());
             micPermissionGranted = true;
             return true;
-        } catch (err) {
-            console.error("Permesso microfono negato o non disponibile:", err);
-            alert("Per usare i comandi vocali devi consentire l'accesso al microfono quando richiesto dal browser.");
+        } catch (e) {
+            alert("Devi consentire l'accesso al microfono per usare la dettatura.");
             return false;
         }
     }
 
-    // 4. Collega tutti i pulsanti con classe .mic-btn
-    const micButtons = document.querySelectorAll('.mic-btn');
-
-    micButtons.forEach(btn => {
+    // 1. GESTIONE DEI SINGOLI MICROFONI SUI CAMPI (.field-voice-btn)
+    const fieldBtns = document.querySelectorAll('.field-voice-btn');
+    fieldBtns.forEach(btn => {
         btn.addEventListener('click', async () => {
-            // Se stiamo già ascoltando sullo stesso pulsante, fermiamo la registrazione
-            if (isListening && currentActiveButton === btn) {
-                recognition.stop();
-                return;
-            }
-
-            // Se stiamo ascoltando su un altro campo, prima lo arrestiamo
             if (isListening) {
                 recognition.stop();
-            }
-
-            // Recupera l'ID del campo collegato tramite l'attributo data-target
-            const targetId = btn.getAttribute('data-target');
-            currentInputField = document.getElementById(targetId);
-            currentActiveButton = btn;
-
-            if (!currentInputField) {
-                console.warn(`Nessun campo trovato con id "${targetId}"`);
                 return;
             }
 
-            // Forza il popup dei permessi al primo tap se non ancora concesso
+            const targetId = btn.getAttribute('data-target');
+            currentTargetField = document.getElementById(targetId);
+            isGlobalMode = false;
+
+            if (!currentTargetField) return;
+
             if (!micPermissionGranted) {
-                const ok = await requestMicrophoneAccess();
+                const ok = await requestMicAccess();
                 if (!ok) return;
             }
 
             try {
                 recognition.start();
             } catch (err) {
-                console.error("Errore durante l'avvio della registrazione:", err);
+                console.error(err);
             }
         });
     });
 
-    // 5. Eventi del ciclo di vita del microfono
+    // 2. GESTIONE DETTATURA SMART GLOBALE (#globalDictationBtn)
+    const globalBtn = document.getElementById('globalDictationBtn');
+    if (globalBtn) {
+        globalBtn.addEventListener('click', async () => {
+            if (isListening) {
+                recognition.stop();
+                return;
+            }
+
+            isGlobalMode = true;
+            currentTargetField = null;
+
+            if (!micPermissionGranted) {
+                const ok = await requestMicAccess();
+                if (!ok) return;
+            }
+
+            try {
+                recognition.start();
+            } catch (err) {
+                console.error(err);
+            }
+        });
+    }
+
     recognition.onstart = () => {
         isListening = true;
-        if (currentActiveButton) currentActiveButton.classList.add('active');
-        console.log("Ascolto attivo sul campo:", currentInputField?.id);
-    };
-
-    recognition.onresult = (event) => {
-        const transcript = event.results[0][0].transcript;
-        if (currentInputField && transcript) {
-            // Aggiunge il testo dettato preservando il testo già presente
-            currentInputField.value = currentInputField.value 
-                ? `${currentInputField.value} ${transcript}` 
-                : transcript;
-
-            // Notifica eventuali listener di eventi (es. framework o auto-salvataggio)
-            currentInputField.dispatchEvent(new Event('input', { bubbles: true }));
+        if (isGlobalMode && globalBtn) {
+            globalBtn.innerText = "Ascolto in corso... Parla!";
+            globalBtn.style.background = "#ef4444";
+            globalBtn.style.color = "#fff";
         }
     };
 
-    recognition.onerror = (event) => {
-        console.error("Errore del microfono:", event.error);
-        isListening = false;
-        if (currentActiveButton) currentActiveButton.classList.remove('active');
+    // 3. RICEZIONE DEL TESTO PARLATO
+    recognition.onresult = (event) => {
+        const text = event.results[0][0].transcript;
+
+        // Se è la dettatura globale, analizza le parole chiave
+        if (isGlobalMode) {
+            parseGlobalDictation(text);
+        } else if (currentTargetField) {
+            // Se è un singolo campo, scrive direttamente lì
+            currentTargetField.value = currentTargetField.value 
+                ? `${currentTargetField.value} ${text}` 
+                : text;
+        }
+    };
+
+    recognition.onerror = (e) => {
+        console.error("Errore riconoscimento:", e.error);
+        resetState();
     };
 
     recognition.onend = () => {
-        isListening = false;
-        if (currentActiveButton) currentActiveButton.classList.remove('active');
-        console.log("Riconoscimento vocale terminato.");
+        resetState();
     };
+
+    function resetState() {
+        isListening = false;
+        if (globalBtn) {
+            globalBtn.innerText = "Avvia Dettatura Globale";
+            globalBtn.style.background = "white";
+            globalBtn.style.color = "#7c3aed";
+        }
+    }
+
+    // Funzione intelligente per la dettatura globale
+    function parseGlobalDictation(sentence) {
+        const lower = sentence.toLowerCase();
+
+        // Esempio: riempie il campo in base alla parola pronunciata
+        if (lower.startsWith('titolo')) {
+            document.getElementById('bookTitle').value = sentence.replace(/titolo/i, '').trim();
+        } else if (lower.startsWith('autore')) {
+            document.getElementById('bookAuthor').value = sentence.replace(/autore/i, '').trim();
+        } else if (lower.startsWith('genere')) {
+            document.getElementById('bookGenre').value = sentence.replace(/genere/i, '').trim();
+        } else if (lower.startsWith('citazione')) {
+            document.getElementById('keyQuote').value = sentence.replace(/citazione/i, '').trim();
+        } else if (lower.startsWith('punti di forza')) {
+            document.getElementById('strengths').value = sentence.replace(/punti di forza/i, '').trim();
+        } else {
+            // Se non trova parole chiave, lo inserisce nelle note/pitch
+            const pitch = document.getElementById('bookPitch');
+            if (pitch) pitch.value = sentence;
+        }
+    }
 });
+            
