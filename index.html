@@ -16,6 +16,12 @@
       });
     }
   </script>
+
+  <style>
+    .archive-card{background:#fff;padding:16px;border:1px solid #f0eae1;border-radius:12px;margin:0 0 16px;box-shadow:0 2px 8px rgba(0,0,0,.04)}
+    .archive-heading{display:flex;align-items:center;justify-content:space-between;gap:10px}.archive-heading h2{margin:0;color:#2c221e;font-size:1.1rem}.archive-heading h2 span{display:inline-grid;place-items:center;min-width:24px;height:24px;border-radius:99px;background:#f4eee7;font-size:.8rem}.archive-heading button,.draft-actions button{width:auto;margin:0;background:#f4eee7;color:#4a3525;border:1px solid #e2d9ce;padding:8px 10px;border-radius:8px;font-size:.82rem}.archive-hint{color:#7a6e65;font-size:.82rem;line-height:1.4;margin:10px 0}.draft-editor-status{font-size:.8rem;color:#6b46c1;margin:8px 0}.draft-empty{font-size:.85rem;color:#7a6e65;margin:10px 0 0}.draft-archive-list{display:grid;gap:8px}.draft-item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:10px;border:1px solid #f0eae1;border-radius:9px;background:#fffdfa}.draft-info{min-width:0;display:grid;gap:3px}.draft-info strong{overflow-wrap:anywhere;color:#2c221e}.draft-info span,.draft-info small{font-size:.75rem;color:#7a6e65;overflow-wrap:anywhere}.draft-actions{display:flex;gap:6px;flex-shrink:0}.draft-actions button:last-child{color:#9b3d31}.actions-card #saveDraftBtn{background:#6b46c1;color:#fff}.actions-card #newDraftBtn{background:#f4eee7;color:#4a3525;border:1px solid #e2d9ce}
+    @media(max-width:420px){.draft-item{align-items:flex-start;flex-direction:column}.draft-actions{width:100%}.draft-actions button{flex:1}.archive-heading{align-items:flex-start}.archive-heading button{white-space:nowrap}}
+  </style>
 </head>
 <body style="background-color: #fbf8f3; font-family: system-ui, -apple-system, sans-serif; color: #333; margin: 0; padding: 16px;">
   
@@ -27,6 +33,13 @@
   </header>
 
   <main class="app-main" style="max-width: 600px; margin: 0 auto;">
+    <section class="archive-card" aria-labelledby="archiveHeading">
+      <div class="archive-heading"><h2 id="archiveHeading">📚 Archivio bozze <span id="draftArchiveCount">0</span></h2><button type="button" id="newDraftBtn">＋ Nuova scheda</button></div>
+      <p class="archive-hint">Le bozze sono salvate su questo dispositivo; riaprile per completarle e aggiornare la stessa nota Obsidian.</p>
+      <div id="draftEditorStatus" class="draft-editor-status" aria-live="polite"></div>
+      <div id="draftArchiveList" class="draft-archive-list"></div>
+    </section>
+
     
     <!-- Card Dettatura Smart Globale -->
     <div class="card" style="background: #7c3aed; color: white; padding: 16px; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 4px 12px rgba(124,58,237,0.2); text-align: center;">
@@ -200,6 +213,7 @@
 
     <!-- Bottoni Azione Principali -->
     <div class="actions-card" style="display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px;">
+      <button type="button" id="saveDraftBtn">💾 Salva bozza</button>
       <button id="sendObsidianBtn" style="background-color: #b45309; color: white; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem; box-shadow: 0 2px 4px rgba(180,83,9,0.2);">📝 Formatta e Invia a Obsidian</button>
       <button id="copyHtmlBtn" style="background-color: #d1bfa7; color: #2c221e; border: none; padding: 12px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">🌐 Formatta per Blog / HTML</button>
       <button id="clearBtn" style="background-color: #ffffff; color: #7a6e65; border: 1px solid #e2d9ce; padding: 10px; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 0.95rem;">🗑️ Svuota Campi</button>
