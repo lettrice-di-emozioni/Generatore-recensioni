@@ -3,60 +3,89 @@ document.addEventListener('DOMContentLoaded', () => {
     const obsidianBtn = document.getElementById('sendObsidianBtn');
     if (obsidianBtn) {
         const field = (id) => (document.getElementById(id)?.value || '').trim();
-        const linesAsBullets = (text, fallback) => {
-            const lines = text.split(/\n+/).map(line => line.trim()).filter(Boolean);
-            return lines.length
-                ? lines.map(line => /^[-*•]\s/.test(line) ? line : `• ${line}`).join('\n')
-                : fallback;
-        };
+        const lines = (text) => text.split(/\n+/).map(line => line.trim()).filter(Boolean);
+        const yamlScalar = (value) => JSON.stringify(value || '');
+        const yamlList = (values) => values.length
+            ? values.map(value => `  - ${yamlScalar(value)}`).join('\n')
+            : '[]';
+        const displayList = (values, fallback) => values.length
+            ? values.map(value => `• ${value}`).join('\n')
+            : fallback;
 
         obsidianBtn.addEventListener('click', () => {
             const bookTitle = field('bookTitle') || 'Recensione senza titolo';
             const author = field('bookAuthor');
             const title = author ? `${bookTitle} - ${author}` : bookTitle;
-            const genre = field('bookGenre') || '—';
-            const format = field('formato') || '—';
-            const rating = field('bookRating') || 'N/D';
+            const genre = field('bookGenre');
+            const format = field('formato');
+            const status = field('bookStatus');
+            const rating = field('bookRating');
             const mood = field('bookMood');
             const pitch = field('bookPitch');
-            const strengths = field('strengths');
-            const weaknesses = field('weaknesses');
+            const strengths = lines(field('strengths'));
+            const weaknesses = lines(field('weaknesses'));
             const themes = field('themes');
             const quote = field('keyQuote');
             const audience = field('targetAudience');
-            const tags = field('customTags').split(/\s+/).filter(Boolean).join(' ');
+            const selectedTags = [...document.querySelectorAll('.tag-pill.selected, .tag-chip.selected')]
+                .map(element => element.dataset.tag || element.textContent.trim());
+            const customTags = field('customTags').split(/\s+/).filter(Boolean);
+            const tags = [...new Set([...selectedTags, ...customTags]
+                .map(tag => tag.replace(/^#+/, '').trim()).filter(Boolean))];
 
-            // Mantiene tutte le sezioni della scheda, così la nota in Obsidian
-            // conserva la stessa struttura anche quando alcuni campi sono vuoti.
-            const markdown = [
+            // Obsidian legge il frontmatter YAML come Proprietà della nota.
+            // Gli array restano proprietà multivalore, e i campi vuoti sono presenti
+            // come stringhe vuote così l'intera scheda è modificabile in Obsidian.
+            const properties = [
+                '---',
+                `titolo: ${yamlScalar(bookTitle)}`,
+                `autore: ${yamlScalar(author)}`,
+                `genere: ${yamlScalar(genre)}`,
+                `formato: ${yamlScalar(format)}`,
+                `stato: ${yamlScalar(status)}`,
+                `valutazione: ${yamlScalar(rating)}`,
+                `mood: ${yamlScalar(mood)}`,
+                `pitch: ${yamlScalar(pitch)}`,
+                `punti_di_forza:\n${yamlList(strengths)}`,
+                `punti_deboli:\n${yamlList(weaknesses)}`,
+                `temi_e_personaggi: ${yamlScalar(themes)}`,
+                `citazione_simbolo: ${yamlScalar(quote)}`,
+                `consigliato_a: ${yamlScalar(audience)}`,
+                `tags:\n${yamlList(tags)}`,
+                '---',
+            ].join('\n');
+
+            const body = [
                 `# ${title}`,
                 '',
                 `> **In una frase:** ${pitch || 'Da completare'}`,
                 '',
-                `• **Genere:** ${genre}`,
-                `• **Formato:** ${format}`,
-                `• **Valutazione:** ${rating}`,
-                `• **Mood / Emotività:** ${mood}`,
+                `• **Genere:** ${genre || '—'}`,
+                `• **Formato:** ${format || '—'}`,
+                `• **Stato:** ${status || '—'}`,
+                `• **Valutazione:** ${rating || 'N/D'}`,
+                `• **Mood / Emotività:** ${mood || '—'}`,
                 '',
                 '---',
                 '',
                 '## 💡 Punti di Forza',
-                linesAsBullets(strengths, 'Nessun punto inserito.'),
+                displayList(strengths, 'Nessun punto inserito.'),
                 '',
                 '## ⚠️ Punti Deboli / Note',
-                linesAsBullets(weaknesses, 'Nessun punto debole evidenziato.'),
+                displayList(weaknesses, 'Nessun punto debole evidenziato.'),
                 '',
                 '## 🔑 Temi e Personaggi Chiave',
                 themes || 'Da completare.',
                 '',
                 '## 💬 Citazione Simbolo',
-                quote ? quote.split(/\n+/).map(line => `> ${line}`).join('\n') : 'Da completare.',
+                quote ? lines(quote).map(line => `> ${line}`).join('\n') : 'Da completare.',
                 '',
                 '## 🎯 A chi lo consiglio',
                 audience || 'Da completare.',
-                ...(tags ? ['', `## 🏷️ Tag`, '', tags] : []),
+                ...(tags.length ? ['', '## 🏷️ Tag', '', tags.map(tag => `#${tag}`).join(' ')] : []),
                 '',
             ].join('\n');
+            const markdown = `${properties}\n\n${body}`;
 
             const output = document.getElementById('outputArea');
             if (output) output.value = markdown;
