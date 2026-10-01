@@ -1,4 +1,74 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Crea la nota Markdown, la copia negli appunti come fallback e apre Obsidian.
+    const obsidianBtn = document.getElementById('sendObsidianBtn');
+    if (obsidianBtn) {
+        const field = (id) => (document.getElementById(id)?.value || '').trim();
+        const section = (title, content) => content ? `## ${title}\n\n${content}` : '';
+        const linesAsBullets = (text) => text
+            .split(/\n+/)
+            .map(line => line.trim())
+            .filter(Boolean)
+            .map(line => /^[-*]\s/.test(line) ? line : `- ${line}`)
+            .join('\n');
+
+        obsidianBtn.addEventListener('click', () => {
+            const title = field('bookTitle') || 'Recensione senza titolo';
+            const author = field('bookAuthor');
+            const genre = field('bookGenre');
+            const format = field('formato');
+            const status = field('bookStatus');
+            const rating = field('bookRating');
+            const mood = field('bookMood');
+            const pitch = field('bookPitch');
+            const strengths = field('strengths');
+            const weaknesses = field('weaknesses');
+            const themes = field('themes');
+            const quote = field('keyQuote');
+            const audience = field('targetAudience');
+            const tags = field('customTags').split(/\s+/).filter(Boolean).join(' ');
+
+            const metadata = [
+                author && `**Autore:** ${author}`,
+                genre && `**Genere:** ${genre}`,
+                format && `**Formato:** ${format}`,
+                status && `**Stato:** ${status}`,
+                rating && `**Valutazione:** ${rating}`,
+                mood && `**Impressione:** ${mood}`,
+            ].filter(Boolean).join('  \n');
+
+            const parts = [`# ${title}`, metadata,
+                section('In breve', pitch),
+                section('Punti di forza', linesAsBullets(strengths)),
+                section('Punti deboli e note critiche', linesAsBullets(weaknesses)),
+                section('Personaggi e temi', themes),
+                section('Citazione simbolo', quote ? quote.split(/\n+/).map(line => `> ${line}`).join('\n') : ''),
+                section('A chi lo consiglio', audience),
+                tags ? `## Tag\n\n${tags}` : '',
+            ].filter(Boolean);
+            const markdown = `${parts.join('\n\n')}\n`;
+            const output = document.getElementById('outputArea');
+            if (output) output.value = markdown;
+
+            // Avvia la copia mantenendo il gesto utente valido per il deep link.
+            let copied = false;
+            const copyPromise = navigator.clipboard?.writeText(markdown)
+                .then(() => { copied = true; })
+                .catch(() => {});
+
+            const obsidianUrl = `obsidian://new?name=${encodeURIComponent(title)}&content=${encodeURIComponent(markdown)}`;
+            window.location.href = obsidianUrl;
+
+            Promise.resolve(copyPromise).then(() => {
+                obsidianBtn.textContent = copied
+                    ? '✅ Nota copiata e inviata a Obsidian'
+                    : '📝 Nota pronta: copia il testo qui sotto';
+                window.setTimeout(() => {
+                    obsidianBtn.textContent = '📝 Formatta e Invia a Obsidian';
+                }, 3500);
+            });
+        });
+    }
+
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
