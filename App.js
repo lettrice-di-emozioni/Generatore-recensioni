@@ -3,21 +3,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const obsidianBtn = document.getElementById('sendObsidianBtn');
     if (obsidianBtn) {
         const field = (id) => (document.getElementById(id)?.value || '').trim();
-        const section = (title, content) => content ? `## ${title}\n\n${content}` : '';
-        const linesAsBullets = (text) => text
-            .split(/\n+/)
-            .map(line => line.trim())
-            .filter(Boolean)
-            .map(line => /^[-*]\s/.test(line) ? line : `- ${line}`)
-            .join('\n');
+        const linesAsBullets = (text, fallback) => {
+            const lines = text.split(/\n+/).map(line => line.trim()).filter(Boolean);
+            return lines.length
+                ? lines.map(line => /^[-*•]\s/.test(line) ? line : `• ${line}`).join('\n')
+                : fallback;
+        };
 
         obsidianBtn.addEventListener('click', () => {
-            const title = field('bookTitle') || 'Recensione senza titolo';
+            const bookTitle = field('bookTitle') || 'Recensione senza titolo';
             const author = field('bookAuthor');
-            const genre = field('bookGenre');
-            const format = field('formato');
-            const status = field('bookStatus');
-            const rating = field('bookRating');
+            const title = author ? `${bookTitle} - ${author}` : bookTitle;
+            const genre = field('bookGenre') || '—';
+            const format = field('formato') || '—';
+            const rating = field('bookRating') || 'N/D';
             const mood = field('bookMood');
             const pitch = field('bookPitch');
             const strengths = field('strengths');
@@ -27,29 +26,41 @@ document.addEventListener('DOMContentLoaded', () => {
             const audience = field('targetAudience');
             const tags = field('customTags').split(/\s+/).filter(Boolean).join(' ');
 
-            const metadata = [
-                author && `**Autore:** ${author}`,
-                genre && `**Genere:** ${genre}`,
-                format && `**Formato:** ${format}`,
-                status && `**Stato:** ${status}`,
-                rating && `**Valutazione:** ${rating}`,
-                mood && `**Impressione:** ${mood}`,
-            ].filter(Boolean).join('  \n');
+            // Mantiene tutte le sezioni della scheda, così la nota in Obsidian
+            // conserva la stessa struttura anche quando alcuni campi sono vuoti.
+            const markdown = [
+                `# ${title}`,
+                '',
+                `> **In una frase:** ${pitch || 'Da completare'}`,
+                '',
+                `• **Genere:** ${genre}`,
+                `• **Formato:** ${format}`,
+                `• **Valutazione:** ${rating}`,
+                `• **Mood / Emotività:** ${mood}`,
+                '',
+                '---',
+                '',
+                '## 💡 Punti di Forza',
+                linesAsBullets(strengths, 'Nessun punto inserito.'),
+                '',
+                '## ⚠️ Punti Deboli / Note',
+                linesAsBullets(weaknesses, 'Nessun punto debole evidenziato.'),
+                '',
+                '## 🔑 Temi e Personaggi Chiave',
+                themes || 'Da completare.',
+                '',
+                '## 💬 Citazione Simbolo',
+                quote ? quote.split(/\n+/).map(line => `> ${line}`).join('\n') : 'Da completare.',
+                '',
+                '## 🎯 A chi lo consiglio',
+                audience || 'Da completare.',
+                ...(tags ? ['', `## 🏷️ Tag`, '', tags] : []),
+                '',
+            ].join('\n');
 
-            const parts = [`# ${title}`, metadata,
-                section('In breve', pitch),
-                section('Punti di forza', linesAsBullets(strengths)),
-                section('Punti deboli e note critiche', linesAsBullets(weaknesses)),
-                section('Personaggi e temi', themes),
-                section('Citazione simbolo', quote ? quote.split(/\n+/).map(line => `> ${line}`).join('\n') : ''),
-                section('A chi lo consiglio', audience),
-                tags ? `## Tag\n\n${tags}` : '',
-            ].filter(Boolean);
-            const markdown = `${parts.join('\n\n')}\n`;
             const output = document.getElementById('outputArea');
             if (output) output.value = markdown;
 
-            // Avvia la copia mantenendo il gesto utente valido per il deep link.
             let copied = false;
             const copyPromise = navigator.clipboard?.writeText(markdown)
                 .then(() => { copied = true; })
