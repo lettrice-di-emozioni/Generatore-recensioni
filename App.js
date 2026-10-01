@@ -5,9 +5,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const field = (id) => (document.getElementById(id)?.value || '').trim();
         const lines = (text) => text.split(/\n+/).map(line => line.trim()).filter(Boolean);
         const yamlScalar = (value) => JSON.stringify(value || '');
-        const yamlList = (values) => values.length
-            ? values.map(value => `  - ${yamlScalar(value)}`).join('\n')
-            : '[]';
+        const yamlList = (values) => values.map(value => `  - ${yamlScalar(value)}`).join('\n');
+        const yamlPropertyList = (key, values) => values.length
+            ? `${key}:\n${yamlList(values)}`
+            : `${key}: []`;
         const displayList = (values, fallback) => values.length
             ? values.map(value => `• ${value}`).join('\n')
             : fallback;
@@ -44,7 +45,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 `format: ${yamlScalar(format)}`,
                 `rating: ${yamlScalar(rating || 'N/D')}`,
                 `date: ${noteDate}`,
-                `tags:\n${yamlList(tags)}`,
+                yamlPropertyList('tags', tags),
                 '---',
             ].join('\n');
 
