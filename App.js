@@ -33,24 +33,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const tags = [...new Set([...selectedTags, ...customTags]
                 .map(tag => tag.replace(/^#+/, '').trim()).filter(Boolean))];
 
-            // Obsidian legge il frontmatter YAML come Proprietà della nota.
-            // Gli array restano proprietà multivalore, e i campi vuoti sono presenti
-            // come stringhe vuote così l'intera scheda è modificabile in Obsidian.
+            // Frontmatter limitato alle proprietà sintetiche, come nel vault dell'utente.
+            // L'analisi completa resta nel corpo della nota, subito dopo le proprietà.
+            const noteDate = new Date().toISOString().slice(0, 10);
             const properties = [
                 '---',
-                `titolo: ${yamlScalar(bookTitle)}`,
-                `autore: ${yamlScalar(author)}`,
-                `genere: ${yamlScalar(genre)}`,
-                `formato: ${yamlScalar(format)}`,
-                `stato: ${yamlScalar(status)}`,
-                `valutazione: ${yamlScalar(rating)}`,
-                `mood: ${yamlScalar(mood)}`,
-                `pitch: ${yamlScalar(pitch)}`,
-                `punti_di_forza:\n${yamlList(strengths)}`,
-                `punti_deboli:\n${yamlList(weaknesses)}`,
-                `temi_e_personaggi: ${yamlScalar(themes)}`,
-                `citazione_simbolo: ${yamlScalar(quote)}`,
-                `consigliato_a: ${yamlScalar(audience)}`,
+                `title: ${yamlScalar(bookTitle)}`,
+                `author: ${yamlScalar(author)}`,
+                `genre: ${yamlScalar(genre)}`,
+                `format: ${yamlScalar(format)}`,
+                `rating: ${yamlScalar(rating || 'N/D')}`,
+                `date: ${noteDate}`,
                 `tags:\n${yamlList(tags)}`,
                 '---',
             ].join('\n');
